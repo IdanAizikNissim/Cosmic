@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="401139b6-5e7b-4417-9fce-2b6615fe5fe8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example/cosmic_example.dart" afterPath="$PROJECT_DIR$/example/cosmic_example.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example/placeholder_client.dart" afterPath="$PROJECT_DIR$/example/placeholder_client.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/cosmic.dart" afterPath="$PROJECT_DIR$/lib/cosmic.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/annotations/annotation.dart" afterPath="$PROJECT_DIR$/lib/src/annotations/annotation.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/http_provider.dart" afterPath="$PROJECT_DIR$/lib/src/http_provider.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/parser.dart" afterPath="$PROJECT_DIR$/lib/src/parser.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/src/service.dart" afterPath="$PROJECT_DIR$/lib/src/service.dart" />
-    </list>
+    <list default="true" id="401139b6-5e7b-4417-9fce-2b6615fe5fe8" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,8 +28,8 @@
       <file leaf-file-name="placeholder_client.dart" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example/placeholder_client.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+            <state relative-caret-position="140">
+              <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -322,12 +313,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1504254775534</updated>
-      <workItem from="1504254776949" duration="18714000" />
+      <workItem from="1504254776949" duration="18791000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18714000" />
+    <option name="totallyTimeSpent" value="18791000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
@@ -521,8 +512,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/placeholder_client.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        <state relative-caret-position="140">
+          <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
