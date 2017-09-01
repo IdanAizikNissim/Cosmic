@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:mirrors';
 
 import 'package:http/http.dart' as http;
+import 'package:jsonx/jsonx.dart';
+
 import 'annotations/http_method.dart';
 import 'annotations/http_methods.dart';
 import 'annotations/data.dart';
@@ -11,11 +14,13 @@ class HttpProvider {
   List<Path> _pathParams;
   List<Query> _queryParams;
   Url _url;
+  TypeMirror _returns;
 
   HttpProvider(this._method, path, [
     this._pathParams,
     this._queryParams,
-    this._url
+    this._url,
+    this._returns
   ]) {
     this._path = _getPath(path, _method, url: _url);
   }
@@ -79,6 +84,19 @@ class HttpProvider {
   }
 
   _get() {
-    return http.get(_path);
+    var completer = new Completer();
+
+    http.get(_path).then((response) {
+      if (_returns == reflectClass(http.Response) ||
+          response.body == null) {
+        completer.completeError(response);
+      } else {
+        completer.complete(
+            decode(response.body, type: _returns.reflectedType)
+        );
+      }
+    });
+
+    return completer.future;
   }
 }

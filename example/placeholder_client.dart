@@ -5,9 +5,9 @@ import 'post.dart' as entity;
 @Client("https://jsonplaceholder.typicode.com")
 class PlaceholderClient extends Service {
 
-//  @Get("/posts")
-//  Future<List<entity.Post>> getPosts();
+  @Get("/posts")
+  Future<List<entity.Post>> getPosts();
 
   @Get("/posts/{id}")
-  Future<Post> getPost({@Path("id") int id});
+  Future<entity.Post> getPost({@Path("id") int id});
 }

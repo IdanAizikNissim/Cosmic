@@ -39,14 +39,18 @@ class Parser {
         List<ParameterMirror> params = (declaration as MethodMirror).parameters;
         var url = _getDataAnnotatedParams(params, Url);
 
+        // Get return type
+        List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
+
         service.add(
           methodName,
           new HttpProvider(
-            httpMethod,
-            path,
-            _getDataAnnotatedParams(params, Path),
-            _getDataAnnotatedParams(params, Query),
-            url.length != 0 ? url.first : null
+              httpMethod,
+              path,
+              _getDataAnnotatedParams(params, Path),
+              _getDataAnnotatedParams(params, Query),
+              url.length != 0 ? url.first : null,
+              returns.length != 0 ? returns.first : null
           )
         );
       }

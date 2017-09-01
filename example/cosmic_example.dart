@@ -6,8 +6,13 @@ import 'package:cosmic/cosmic.dart';
 
 main() {
   PlaceholderClient service = Cosmic.create(new PlaceholderClient());
+
   service.getPost(id: 1).then((post) {
-    print(post);
+    print("${post.id} - ${post.title}");
+  });
+
+  service.getPosts().then((posts) {
+    posts.forEach((post) => print("${post.id} - ${post.title}"));
   });
 }
 
