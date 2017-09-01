@@ -9,7 +9,10 @@ PlaceholderClient service = Cosmic.create(new PlaceholderClient());
 
 main() async {
   // Get post with id: 1
-  var post_1 = await service.getPost(id: 1);
+  Map<String, String> headers = {
+    "auth": "13325353453"
+  };
+  var post_1 = await service.getPost(id: 1, headers: headers);
   print("${post_1.id} - ${post_1.title}");
 
   // Get all posts

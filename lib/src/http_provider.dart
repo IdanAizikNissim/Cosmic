@@ -13,6 +13,7 @@ class HttpProvider {
   String _path;
   List<Path> _pathParams;
   List<Query> _queryParams;
+  HeaderMap _headerMap;
   Body _body;
   Url _url;
   TypeMirror _returns;
@@ -20,6 +21,7 @@ class HttpProvider {
   HttpProvider(this._method, path, [
     this._pathParams,
     this._queryParams,
+    this._headerMap,
     this._body,
     this._url,
     this._returns
@@ -30,20 +32,27 @@ class HttpProvider {
   call(Map<Symbol, dynamic> namedArguments) {
     _injectPathParams(namedArguments);
     _concatQueryParams(namedArguments);
-    var body = _body != null ? _getBodyParam(namedArguments) : null;
+
+    // Get body
+    var body =
+      _body != null ? _getBodyParam(namedArguments) : null;
+
+    // Get header map
+    Map<String, String> headers =
+      _headerMap != null ? _getHeaderMapParam(namedArguments) : null;
 
     switch (this._method.runtimeType) {
       case Get:
-        return _get();
+        return _get(headers: headers);
       case Post:
-        return _post(body);
+        return _post(body: body, headers: headers);
       case Put:
       case Patch:
-        return _put(body);
+        return _put(body: body, headers: headers);
       case Delete:
-        return _delete();
+        return _delete(headers: headers);
       case Head:
-        return _head();
+        return _head(headers: headers);
     }
   }
 
@@ -108,37 +117,52 @@ class HttpProvider {
     return body;
   }
 
-  Future<dynamic> _get() {
-    return _request(http.get(_path));
+  _getHeaderMapParam(Map<Symbol, dynamic> namedArguments) {
+    Map<String, String> headerMap;
+
+    namedArguments.forEach((sym, value) {
+      if (MirrorSystem.getName(sym) == _headerMap.name) {
+        headerMap = value;
+        return;
+      }
+    });
+
+    return headerMap;
   }
 
-  Future<dynamic> _post(body) {
+  Future<dynamic> _get({Map<String, String> headers}) {
+    return _request(http.get(_path, headers: headers));
+  }
+
+  Future<dynamic> _post({body, Map<String, String> headers}) {
     return _request(
       http.post(
-          _path,
-          body: body != null ? encode(body) : null
+        _path,
+        body: body != null ? encode(body) : null,
+        headers: headers
       )
     );
   }
 
-  Future<dynamic> _put(body) {
+  Future<dynamic> _put({body, Map<String, String> headers}) {
     return _request(
       http.put(
-          _path,
-          body: body != null ? encode(body) : null
+        _path,
+        body: body != null ? encode(body) : null,
+        headers: headers
       )
     );
   }
 
-  Future<dynamic> _delete() {
+  Future<dynamic> _delete({Map<String, String> headers}) {
     return _request(
-      http.delete(_path)
+      http.delete(_path, headers: headers)
     );
   }
 
-  Future<dynamic> _head() {
+  Future<dynamic> _head({Map<String, String> headers}) {
     return _request(
-      http.head(_path)
+      http.head(_path, headers: headers)
     );
   }
 

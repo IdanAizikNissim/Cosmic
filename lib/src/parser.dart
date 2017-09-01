@@ -44,6 +44,9 @@ class Parser {
         // Body param
         var body = _getDataAnnotatedParams(params, Body);
 
+        // HeaderMap
+        var headerMap = _getDataAnnotatedParams(params, HeaderMap);
+
         // Get return type
         List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
 
@@ -54,6 +57,7 @@ class Parser {
               path,
               _getDataAnnotatedParams(params, Path),
               _getDataAnnotatedParams(params, Query),
+              headerMap.length != 0 ? headerMap.first : null,
               body.length != 0 ? body.first : null,
               url.length != 0 ? url.first : null,
               returns.length != 0 ? returns.first : null
@@ -153,6 +157,10 @@ class Parser {
       // Body
       else if (typeName == reflectType(Body).qualifiedName) {
         annotation = new Body("");
+      }
+      // HeaderMap
+      else if (typeName == reflectType(HeaderMap).qualifiedName) {
+        annotation = new HeaderMap("");
       }
     }
 

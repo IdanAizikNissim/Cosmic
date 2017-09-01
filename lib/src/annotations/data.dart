@@ -27,3 +27,10 @@ class Body extends Annotation {
 
   String get name => _name;
 }
+
+class HeaderMap extends Annotation {
+  final String _name;
+  const HeaderMap(this._name) : super(true);
+
+  String get name => _name;
+}

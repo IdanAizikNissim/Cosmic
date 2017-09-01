@@ -10,7 +10,7 @@ class PlaceholderClient extends Service {
   Future<List<entity.Post>> getPosts();
 
   @Get("/posts/{id}")
-  Future<entity.Post> getPost({@Path("id") int id});
+  Future<entity.Post> getPost({@HeaderMap("headers") Map<String, String> headers, @Path("id") int id});
 
   @Post("/posts")
   Future<entity.Post> create({@Body("post") entity.Post post});
