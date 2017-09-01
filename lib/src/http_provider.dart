@@ -42,6 +42,8 @@ class HttpProvider {
         return _put(body);
       case Delete:
         return _delete();
+      case Head:
+        return _head();
     }
   }
 
@@ -131,6 +133,12 @@ class HttpProvider {
   Future<dynamic> _delete() {
     return _request(
       http.delete(_path)
+    );
+  }
+
+  Future<dynamic> _head() {
+    return _request(
+      http.head(_path)
     );
   }
 
