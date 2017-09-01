@@ -31,4 +31,8 @@ main() async {
   post.body = "Hakuna matata!";
   post = await service.update(id: post.id, post: post);
   print("${post.id} - ${post.body}");
+
+  // Delete
+  var resp = await service.delete(id: 1);
+  print(resp.body);
 }

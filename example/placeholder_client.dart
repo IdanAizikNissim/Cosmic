@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cosmic/cosmic.dart';
+import 'package:http/http.dart' as http;
 import 'post.dart' as entity;
 
 @Client("https://jsonplaceholder.typicode.com")
@@ -16,4 +17,7 @@ class PlaceholderClient extends Service {
 
   @Patch("/posts/{id}")
   Future<entity.Post> update({@Path("id") int id, @Body("post") entity.Post post});
+
+  @Delete("/posts/{id}")
+  Future<http.Response> delete({@Path("id") int id});
 }

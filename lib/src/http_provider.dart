@@ -40,6 +40,8 @@ class HttpProvider {
       case Put:
       case Patch:
         return _put(body);
+      case Delete:
+        return _delete();
     }
   }
 
@@ -110,19 +112,25 @@ class HttpProvider {
 
   Future<dynamic> _post(body) {
     return _request(
-        http.post(
-            _path,
-            body: body != null ? encode(body) : null
-        )
+      http.post(
+          _path,
+          body: body != null ? encode(body) : null
+      )
     );
   }
 
   Future<dynamic> _put(body) {
     return _request(
-        http.put(
-            _path,
-            body: body != null ? encode(body) : null
-        )
+      http.put(
+          _path,
+          body: body != null ? encode(body) : null
+      )
+    );
+  }
+
+  Future<dynamic> _delete() {
+    return _request(
+      http.delete(_path)
     );
   }
 
@@ -132,7 +140,7 @@ class HttpProvider {
     req.then((response) {
       if (_returns == reflectClass(http.Response) ||
           response.body == null) {
-        completer.completeError(response);
+        completer.complete(response);
       } else {
         completer.complete(
             decode(response.body, type: _returns.reflectedType)
