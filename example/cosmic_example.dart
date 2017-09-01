@@ -5,6 +5,9 @@ import 'placeholder_client.dart';
 import 'package:cosmic/cosmic.dart';
 
 main() {
-  Cosmic.create(new PlaceholderClient());
+  PlaceholderClient service = Cosmic.create(new PlaceholderClient());
+  service.getPost(id: 1).then((post) {
+    print(post);
+  });
 }
 

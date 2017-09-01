@@ -8,6 +8,6 @@ class Service {
   }
 
   noSuchMethod(Invocation invocation) {
-    return _values[invocation.memberName];
+    return _values[invocation.memberName](invocation.namedArguments);
   }
 }
