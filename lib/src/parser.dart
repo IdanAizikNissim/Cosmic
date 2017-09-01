@@ -37,7 +37,12 @@ class Parser {
           MirrorSystem.getName(declaration.simpleName);
 
         List<ParameterMirror> params = (declaration as MethodMirror).parameters;
+
+        // Url param
         var url = _getDataAnnotatedParams(params, Url);
+
+        // Body param
+        var body = _getDataAnnotatedParams(params, Body);
 
         // Get return type
         List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
@@ -49,6 +54,7 @@ class Parser {
               path,
               _getDataAnnotatedParams(params, Path),
               _getDataAnnotatedParams(params, Query),
+              body.length != 0 ? body.first : null,
               url.length != 0 ? url.first : null,
               returns.length != 0 ? returns.first : null
           )
@@ -143,6 +149,10 @@ class Parser {
       // Url
       else if (typeName == reflectType(Url).qualifiedName) {
         annotation = new Url("");
+      }
+      // Body
+      else if (typeName == reflectType(Body).qualifiedName) {
+        annotation = new Body("");
       }
     }
 

@@ -3,16 +3,32 @@
 
 import 'placeholder_client.dart';
 import 'package:cosmic/cosmic.dart';
+import 'post.dart' as entity;
 
-main() {
-  PlaceholderClient service = Cosmic.create(new PlaceholderClient());
+PlaceholderClient service = Cosmic.create(new PlaceholderClient());
 
-  service.getPost(id: 1).then((post) {
-    print("${post.id} - ${post.title}");
-  });
+main() async {
+  // Get post with id: 1
+  var post_1 = await service.getPost(id: 1);
+  print("${post_1.id} - ${post_1.title}");
 
-  service.getPosts().then((posts) {
-    posts.forEach((post) => print("${post.id} - ${post.title}"));
-  });
+  // Get all posts
+  var posts = await service.getPosts();
+  posts.forEach((post) => print("${post.id} - ${post.title}"));
+
+  // Create a new post
+  entity.Post post = new entity.Post()
+    ..title = "Hello From Dart Cosmic"
+    ..body = "foo"
+    ..userId = 1;
+
+  var postResponse = await service.create(post: post);
+  post.id = postResponse.id;
+  print("${post.id} - ${post.title}");
+
+  // Update post
+  post.id = 1;
+  post.body = "Hakuna matata!";
+  post = await service.update(id: post.id, post: post);
+  print("${post.id} - ${post.body}");
 }
-
