@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:mirrors';
 
 import 'package:http/http.dart' as http;
 import 'package:jsonx/jsonx.dart';
@@ -7,6 +6,7 @@ import 'package:jsonx/jsonx.dart';
 import 'annotations/http_method.dart';
 import 'annotations/http_methods.dart';
 import 'annotations/data.dart';
+import 'utils.dart';
 
 class HttpProvider {
   HttpMethod _method;
@@ -16,7 +16,7 @@ class HttpProvider {
   HeaderMap _headerMap;
   Body _body;
   Url _url;
-  TypeMirror _returns;
+  Type _returns;
 
   HttpProvider(this._method, path, [
     this._pathParams,
@@ -80,18 +80,20 @@ class HttpProvider {
 
   void _injectPathParams(Map<Symbol, dynamic> namedArguments) {
     namedArguments.forEach((sym, value) {
-      String name = MirrorSystem.getName(sym);
+      String name = getSymbolName(sym);
       if (_isPathParam(name)) {
         this._path = _path.replaceFirst("{${name}}", value.toString());
       }
     });
   }
 
+
+
   void _concatQueryParams(Map<Symbol, dynamic> namedArguments) {
     bool first = true;
 
     namedArguments.forEach((sym, value) {
-      String name = MirrorSystem.getName(sym);
+      String name = getSymbolName(sym);
       if (_isQueryParam(name)) {
         String concatBy = "&";
         if (first) {
@@ -108,7 +110,7 @@ class HttpProvider {
     dynamic body;
 
     namedArguments.forEach((sym, value) {
-      if (MirrorSystem.getName(sym) == _body.name) {
+      if (getSymbolName(sym) == _body.name) {
         body = value;
         return;
       }
@@ -121,7 +123,7 @@ class HttpProvider {
     Map<String, String> headerMap;
 
     namedArguments.forEach((sym, value) {
-      if (MirrorSystem.getName(sym) == _headerMap.name) {
+      if (getSymbolName(sym) == _headerMap.name) {
         headerMap = value;
         return;
       }
@@ -170,12 +172,12 @@ class HttpProvider {
     var completer = new Completer();
 
     req.then((response) {
-      if (_returns == reflectClass(http.Response) ||
+      if (_returns == http.Response ||
           response.body == null) {
         completer.complete(response);
       } else {
         completer.complete(
-            decode(response.body, type: _returns.reflectedType)
+            decode(response.body, type: _returns)
         );
       }
     });

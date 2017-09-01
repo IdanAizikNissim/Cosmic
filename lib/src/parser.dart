@@ -60,7 +60,7 @@ class Parser {
               headerMap.length != 0 ? headerMap.first : null,
               body.length != 0 ? body.first : null,
               url.length != 0 ? url.first : null,
-              returns.length != 0 ? returns.first : null
+              returns.length != 0 ? returns.first.reflectedType : null
           )
         );
       }
