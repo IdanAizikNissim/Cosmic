@@ -1,12 +1,4 @@
-import 'annotation.dart';
-
-abstract class HttpMethod extends Annotation {
-  final String _path;
-
-  const HttpMethod(this._path);
-
-  String get path => _path;
-}
+import 'http_method.dart';
 
 class Get extends HttpMethod {
   const Get(String path) : super(path);
@@ -31,3 +23,12 @@ class Delete extends HttpMethod {
 class Head extends HttpMethod {
   const Head(String path) : super(path);
 }
+
+const HttpMethods = const [
+  Get,
+  Post,
+  Put,
+  Patch,
+  Delete,
+  Head
+];
