@@ -37,6 +37,9 @@ class HttpProvider {
         return _get();
       case Post:
         return _post(body);
+      case Put:
+      case Patch:
+        return _put(body);
     }
   }
 
@@ -102,26 +105,31 @@ class HttpProvider {
   }
 
   Future<dynamic> _get() {
-    var completer = new Completer();
-
-    http.get(_path).then((response) {
-      if (_returns == reflectClass(http.Response) ||
-          response.body == null) {
-        completer.completeError(response);
-      } else {
-        completer.complete(
-            decode(response.body, type: _returns.reflectedType)
-        );
-      }
-    });
-
-    return completer.future;
+    return _request(http.get(_path));
   }
 
   Future<dynamic> _post(body) {
+    return _request(
+        http.post(
+            _path,
+            body: body != null ? encode(body) : null
+        )
+    );
+  }
+
+  Future<dynamic> _put(body) {
+    return _request(
+        http.put(
+            _path,
+            body: body != null ? encode(body) : null
+        )
+    );
+  }
+
+  Future<dynamic> _request(Future<http.Response> req) {
     var completer = new Completer();
 
-    http.post(_path, body: body != null ? encode(body) : null).then((response) {
+    req.then((response) {
       if (_returns == reflectClass(http.Response) ||
           response.body == null) {
         completer.completeError(response);

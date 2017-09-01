@@ -13,4 +13,7 @@ class PlaceholderClient extends Service {
 
   @Post("/posts")
   Future<entity.Post> create({@Body("post") entity.Post post});
+
+  @Patch("/posts/{id}")
+  Future<entity.Post> update({@Path("id") int id, @Body("post") entity.Post post});
 }
