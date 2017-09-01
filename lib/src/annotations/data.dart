@@ -20,3 +20,10 @@ class Query extends Annotation {
 
   String get query => _query;
 }
+
+class Body extends Annotation {
+  final String _name;
+  const Body(this._name) : super(true);
+
+  String get name => _name;
+}

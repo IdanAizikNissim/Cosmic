@@ -13,12 +13,14 @@ class HttpProvider {
   String _path;
   List<Path> _pathParams;
   List<Query> _queryParams;
+  Body _body;
   Url _url;
   TypeMirror _returns;
 
   HttpProvider(this._method, path, [
     this._pathParams,
     this._queryParams,
+    this._body,
     this._url,
     this._returns
   ]) {
@@ -28,10 +30,13 @@ class HttpProvider {
   call(Map<Symbol, dynamic> namedArguments) {
     _injectPathParams(namedArguments);
     _concatQueryParams(namedArguments);
+    var body = _body != null ? _getBodyParam(namedArguments) : null;
 
     switch (this._method.runtimeType) {
       case Get:
         return _get();
+      case Post:
+        return _post(body);
     }
   }
 
@@ -83,10 +88,40 @@ class HttpProvider {
     });
   }
 
-  _get() {
+  _getBodyParam(Map<Symbol, dynamic> namedArguments) {
+    dynamic body;
+
+    namedArguments.forEach((sym, value) {
+      if (MirrorSystem.getName(sym) == _body.name) {
+        body = value;
+        return;
+      }
+    });
+
+    return body;
+  }
+
+  Future<dynamic> _get() {
     var completer = new Completer();
 
     http.get(_path).then((response) {
+      if (_returns == reflectClass(http.Response) ||
+          response.body == null) {
+        completer.completeError(response);
+      } else {
+        completer.complete(
+            decode(response.body, type: _returns.reflectedType)
+        );
+      }
+    });
+
+    return completer.future;
+  }
+
+  Future<dynamic> _post(body) {
+    var completer = new Completer();
+
+    http.post(_path, body: body != null ? encode(body) : null).then((response) {
       if (_returns == reflectClass(http.Response) ||
           response.body == null) {
         completer.completeError(response);
