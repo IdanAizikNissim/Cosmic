@@ -3,6 +3,7 @@
 library cosmic;
 
 export 'package:cosmic/src/annotations/client.dart';
+export 'package:cosmic/src/annotations/data.dart';
 export 'package:cosmic/src/annotations/http_methods.dart';
 export 'src/service.dart';
 
@@ -12,6 +13,6 @@ import 'src/parser.dart';
 class Cosmic {
   static create(Service service) {
     Parser parser = new Parser();
-    parser.parse(service);
+    return parser.parse(service);
   }
 }

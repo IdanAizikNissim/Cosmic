@@ -3,6 +3,7 @@ import 'http_provider.dart';
 
 import 'annotations/annotation.dart';
 import 'annotations/client.dart';
+import 'annotations/data.dart';
 import 'annotations/http_method.dart';
 import 'annotations/http_methods.dart';
 import 'service.dart';
@@ -32,10 +33,38 @@ class Parser {
     for (var declaration in cm.declarations.values) {
       final httpMethod = _isHttpMethod(declaration);
       if (httpMethod!= null) {
-        final String methodName = MirrorSystem.getName(declaration.simpleName);
-        service.add(methodName, HttpProvider.provide(httpMethod, path, declaration));
+        final String methodName =
+          MirrorSystem.getName(declaration.simpleName);
+
+        List<ParameterMirror> params = (declaration as MethodMirror).parameters;
+        var url = _getDataAnnotatedParams(params, Url);
+
+        service.add(
+          methodName,
+          new HttpProvider(
+            httpMethod,
+            path,
+            _getDataAnnotatedParams(params, Path),
+            _getDataAnnotatedParams(params, Query),
+            url.length != 0 ? url.first : null
+          )
+        );
       }
     }
+  }
+
+  _getDataAnnotatedParams(List<ParameterMirror> methodParams, Type type) {
+    List<dynamic> params = new List();
+
+    for (ParameterMirror param in methodParams) {
+      List<dynamic> ps = _getAnnotateds(param, type);
+
+      if (ps != null) {
+        params.addAll(ps);
+      }
+    }
+
+    return params;
   }
 
   _isHttpMethod(declaration) {
@@ -98,6 +127,18 @@ class Parser {
       else if ((typeMirror as ClassMirror).superclass != null &&
           (typeMirror as ClassMirror).superclass.qualifiedName == reflectType(HttpMethod).qualifiedName) {
         annotation = new HttpMethod("");
+      }
+      // Path
+      else if (typeName == reflectType(Path).qualifiedName) {
+        annotation = new Path("");
+      }
+      // Query
+      else if (typeName == reflectType(Query).qualifiedName) {
+        annotation = new Query("");
+      }
+      // Url
+      else if (typeName == reflectType(Url).qualifiedName) {
+        annotation = new Url("");
       }
     }
 
