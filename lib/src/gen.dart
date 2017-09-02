@@ -22,10 +22,10 @@ class Gen {
 
   static String _wrapWithClass(String serviceName, List<String> methods) {
     return '''
-    import 'dart:async';\n
-    import 'package:http/http.dart' as http;\n
-    import 'package:jsonx/jsonx.dart';\n\n
-    class $serviceName {\n\n
+    import 'dart:async';
+    import 'package:http/http.dart' as http;
+    import 'package:jsonx/jsonx.dart';
+    class $serviceName {
     ${methods.join('\n')}
     }
     ''';

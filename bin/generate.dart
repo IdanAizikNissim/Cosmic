@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:convert';
 
+import 'package:dart_style/dart_style.dart';
 import 'package:args/args.dart';
 import 'package:path/path.dart';
 
@@ -29,7 +30,7 @@ main(List<String> arguments) async {
   // Get generated code
   var generated = await _generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS]);
   outputFile.openWrite();
-  outputFile.writeAsString(generated.toString());
+  outputFile.writeAsString(new DartFormatter().format(generated.toString()));
 }
 
 Future<List<String>> _generate(Uri path, String serviceClass) async {
