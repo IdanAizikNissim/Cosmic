@@ -1,12 +1,13 @@
 import 'dart:mirrors';
 
+import 'package:path/path.dart' as path;
 import 'package:cosmic/src/annotations/data.dart';
 import 'package:cosmic/src/http_provider.dart';
 import 'package:cosmic/src/service.dart';
 import 'package:cosmic/src/utils.dart';
 
 class Gen {
-  static String generate(Service service, List<String> imports) {
+  static String generate(Service service, List<String> imports, String outputPath) {
     List<String> methods = new List();
     service.values.forEach((sym, provider) {
       methods.add(
@@ -16,17 +17,17 @@ class Gen {
 
     return _wrapWithClass(
       getSymbolName(reflectType(service.runtimeType).simpleName),
-      imports,
+      imports, outputPath,
       methods
     );
   }
 
-  static String _wrapWithClass(String serviceName, List<String> imports, List<String> methods) {
+  static String _wrapWithClass(String serviceName, List<String> imports, String outputPath, List<String> methods) {
     return '''
     import 'dart:async';
     import 'package:http/http.dart' as http;
     import 'package:jsonx/jsonx.dart';
-    ${imports.map((import) => "import '$import';").toList().join()}
+    ${imports.map((import) => "import '${path.relative((import as Uri).path, from: outputPath)}';").toList().join()}
     class $serviceName {
     ${methods.join('\n')}
     }

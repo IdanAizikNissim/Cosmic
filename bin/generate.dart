@@ -28,18 +28,18 @@ main(List<String> arguments) async {
   _createOutputDir(outPutDir);
 
   // Get generated code
-  var generated = await _generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS]);
+  var generated = await _generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS], args[ARG_OPTION_OUTPUT]);
   outputFile.openWrite();
   outputFile.writeAsString(new DartFormatter().format(generated.toString()));
 }
 
-Future<List<String>> _generate(Uri path, String serviceClass) async {
+Future<List<String>> _generate(Uri path, String serviceClass, String outputPath) async {
   return _withServer(path.toString(), (HttpServer server) async {
-    return await _execute(server.port, path, serviceClass);
+    return await _execute(server.port, path, serviceClass, outputPath);
   });
 }
 
-Future<dynamic> _execute(int port, Uri path, String serviceClass) async {
+Future<dynamic> _execute(int port, Uri path, String serviceClass,  String outputPath) async {
   ReceivePort messagePort = new ReceivePort();
   ReceivePort errorPort = new ReceivePort();
 
@@ -55,7 +55,8 @@ Future<dynamic> _execute(int port, Uri path, String serviceClass) async {
           "http://127.0.0.1:$port",
           messagePort.sendPort,
           errorPort.sendPort,
-          serviceClass
+          serviceClass,
+          outputPath
         ],
         onError: errorPort.sendPort
     );
@@ -93,9 +94,9 @@ Future<dynamic> _execute(int port, Uri path, String serviceClass) async {
 Future _isolateLoader(List args) async {
   return Isolate.spawnUri(
       Uri.parse(args[0]), // service.dart
-      [args[3]], // ServiceClassName
+      [args[3], args[4]], // ServiceClassName
       args[1] as SendPort,
-      onError: args[2] as SendPort
+      onError: args[2] as SendPort,
   );
 }
 
@@ -185,7 +186,7 @@ String _generatorSource(String apiFilePath) {
         message.send("service args[0] isn't definded in '${apiFilePath}'");
       } else {
         var im = cm.newInstance(new Symbol(''), []);
-        message.send(Cosmic.generate(im.reflectee, toImport));
+        message.send(Cosmic.generate(im.reflectee, toImport, args[1]));
       }
     }
   }
