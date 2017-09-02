@@ -167,10 +167,13 @@ String _generatorSource(String apiFilePath) {
   main(args, message) async {
     MirrorSystem mirrors = currentMirrorSystem();
     var lm;
+    List<String> toImport = new List();
     mirrors.libraries.forEach((key, val) {
       if (key == Uri.parse('${apiFilePath}')) {
         lm = val;
         return;
+      } else if (key.toString().startsWith('file://')) {
+        toImport.add(key);
       }
     });
     
@@ -182,7 +185,7 @@ String _generatorSource(String apiFilePath) {
         message.send("service args[0] isn't definded in '${apiFilePath}'");
       } else {
         var im = cm.newInstance(new Symbol(''), []);
-        message.send(Cosmic.generate(im.reflectee));
+        message.send(Cosmic.generate(im.reflectee, toImport));
       }
     }
   }

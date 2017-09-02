@@ -17,7 +17,7 @@ class Cosmic {
     return parser.parse(service);
   }
 
-  static String generate(Service service) {
-    return Gen.generate(create(service));
+  static String generate(Service service, List<String> imports) {
+    return Gen.generate(create(service), imports);
   }
 }

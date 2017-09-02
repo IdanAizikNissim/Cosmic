@@ -6,7 +6,7 @@ import 'package:cosmic/src/service.dart';
 import 'package:cosmic/src/utils.dart';
 
 class Gen {
-  static String generate(Service service) {
+  static String generate(Service service, List<String> imports) {
     List<String> methods = new List();
     service.values.forEach((sym, provider) {
       methods.add(
@@ -16,15 +16,17 @@ class Gen {
 
     return _wrapWithClass(
       getSymbolName(reflectType(service.runtimeType).simpleName),
+      imports,
       methods
     );
   }
 
-  static String _wrapWithClass(String serviceName, List<String> methods) {
+  static String _wrapWithClass(String serviceName, List<String> imports, List<String> methods) {
     return '''
     import 'dart:async';
     import 'package:http/http.dart' as http;
     import 'package:jsonx/jsonx.dart';
+    ${imports.map((import) => "import '$import';").toList().join()}
     class $serviceName {
     ${methods.join('\n')}
     }

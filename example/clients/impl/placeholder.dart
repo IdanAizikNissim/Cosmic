@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:jsonx/jsonx.dart';
-
-import '../../entities/post.dart';
+import 'file:///Users/idan/Documents/projects/dart/cosmic/example/entities/post.dart';
 
 class PlaceholderClient {
   Future<List<Post>> getPosts() {
