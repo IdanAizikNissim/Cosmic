@@ -12,9 +12,6 @@ const ARG_OPTION_OUTPUT        = 'output';
 const ARG_FLAG_OVERWRITE       = 'overwrite';
 
 main(List<String> arguments) async {
-//  MirrorSystem mirrors = currentMirrorSystem();
-//  mirrors.libraries.forEach((key, val) => print(key));
-
   var args = _parseArgs(arguments);
 
   var inputFilePath = absolute(args[ARG_OPTION_INPUT]);
@@ -31,6 +28,8 @@ main(List<String> arguments) async {
 
   // Get generated code
   var generated = await _generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS]);
+  outputFile.openWrite();
+  outputFile.writeAsString(generated.toString());
 }
 
 Future<List<String>> _generate(Uri path, String serviceClass) async {
@@ -80,7 +79,6 @@ Future<dynamic> _execute(int port, Uri path, String serviceClass) async {
   }
 
   messageSubscription = messagePort.listen((value) {
-    print(value);
     finish(value, false);
   });
 
@@ -183,14 +181,9 @@ String _generatorSource(String apiFilePath) {
         message.send("service args[0] isn't definded in '${apiFilePath}'");
       } else {
         var im = cm.newInstance(new Symbol(''), []);
-        var service = Cosmic.create(im.reflectee);
-        message.send(genCode(service));
+        message.send(Cosmic.generate(im.reflectee));
       }
     }
-  }
-  
-  String genCode(service) {
-    return 'code';
   }
   ''';
 }

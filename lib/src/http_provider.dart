@@ -18,6 +18,15 @@ class HttpProvider {
   Url _url;
   Type _returns;
 
+  HttpMethod get method => _method;
+  String get path => _path;
+  List<Path> get pathParams => _pathParams;
+  List<Query> get queryParams => _queryParams;
+  HeaderMap get headerMap => _headerMap;
+  Body get body => _body;
+  Url get url => _url;
+  Type get returns => _returns;
+
   HttpProvider(this._method, path, [
     this._pathParams,
     this._queryParams,

@@ -10,4 +10,6 @@ class Service {
   noSuchMethod(Invocation invocation) {
     return _values[invocation.memberName](invocation.namedArguments);
   }
+
+  Map<Symbol, dynamic> get values => _values;
 }

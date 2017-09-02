@@ -7,6 +7,7 @@ export 'package:cosmic/src/annotations/data.dart';
 export 'package:cosmic/src/annotations/http_methods.dart';
 export 'src/service.dart';
 
+import 'src/gen.dart';
 import 'src/service.dart';
 import 'src/parser.dart';
 
@@ -14,5 +15,9 @@ class Cosmic {
   static create(Service service) {
     Parser parser = new Parser();
     return parser.parse(service);
+  }
+
+  static String generate(Service service) {
+    return Gen.generate(create(service));
   }
 }
