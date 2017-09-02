@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cosmic/cosmic.dart';
 import 'package:http/http.dart' as http;
-import 'post.dart' as entity;
+import '../../entities/post.dart' as entity;
 
 @Client("https://jsonplaceholder.typicode.com")
 class PlaceholderClient extends Service {
