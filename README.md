@@ -28,9 +28,9 @@ A simple usage example:
 
 ## Generate
 dart:mirror is absent from flutter   
-use cosmic:generate in order to generate the api impl pre runtime
+use cosmic:generate in order to generate the api impl pre runtime  
 
-    $ pub run cosmic:generate -i example/clients/def/placeholder.dart -o example/clients/impl -w true
+    $ pub run cosmic:generate -i example/clients/def/placeholder.dart -c PlaceholderClient -o example/clients/impl -w true
 
 ## Features and bugs
 
