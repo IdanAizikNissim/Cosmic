@@ -181,15 +181,16 @@ class HttpProvider {
     var completer = new Completer();
 
     req.then((response) {
-      if (_returns == http.Response ||
-          response.body == null) {
+      if (_returns == http.Response) {
         completer.complete(response);
+      } else if (response.body == null) {
+        completer.completeError(response);
       } else {
         completer.complete(
             decode(response.body, type: _returns)
         );
       }
-    });
+    }).catchError((error) => completer.completeError(error));
 
     return completer.future;
   }

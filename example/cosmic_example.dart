@@ -31,9 +31,9 @@ main() async {
 //import 'clients/def/placeholder.dart';
 //import 'package:cosmic/cosmic.dart';
 //import 'entities/post.dart' as entity;
-
+//
 //PlaceholderClient service = Cosmic.create(new PlaceholderClient());
-
+//
 //main() async {
 //  // Get post with id: 1
 //  Map<String, String> headers = {

@@ -30,6 +30,8 @@ class Gen {
     ${imports.map((import) => "import '${path.relative((import as Uri).path, from: outputPath)}';").toList().join()}
     class $serviceName {
     ${methods.join('\n')}
+    \n
+    ${_requestWrapperMethod()}
     }
     ''';
   }
@@ -72,18 +74,32 @@ class Gen {
 
   static String _wrapRequest(String req) {
     return '''
-    var completer = new Completer();\n\n
-    $req.then((response) {
-      if (returnType == http.Response ||
-          response.body == null) {
-        completer.complete(response);
-      } else {
-        completer.complete(
-            decode(response.body, type: returnType)
-        );
-      }
-    });\n\n
-    return completer.future;
+    return _request(
+      $req,
+      returnType
+    );
+    ''';
+  }
+
+  static String _requestWrapperMethod() {
+    return '''
+    Future<dynamic> _request(Future<http.Response> req, Type returnType) {
+      var completer = new Completer();
+  
+      req.then((response) {
+        if (returnType == http.Response) {
+          completer.complete(response);
+        } else if (response.body == null) {
+          completer.completeError(response);
+        } else {
+          completer.complete(
+              decode(response.body, type: returnType)
+          );
+        }
+      }).catchError((error) => completer.completeError(error));
+  
+      return completer.future;
+    }
     ''';
   }
 
