@@ -15,6 +15,10 @@ const ARG_FLAG_OVERWRITE       = 'overwrite';
 main(List<String> arguments) async {
   var args = _parseArgs(arguments);
 
+  assert(args[ARG_OPTION_INPUT] != null);
+  assert(args[ARG_OPTION_SERVICE_CLASS] != null);
+  assert(args[ARG_OPTION_OUTPUT] != null);
+
   var inputFilePath = absolute(args[ARG_OPTION_INPUT]);
   File inputFile = _getInputFile(inputFilePath);
 
@@ -111,11 +115,11 @@ File _getInputFile(String path) {
   return file;
 }
 
-File _getOutPutFile(String path, bool overwrite) {
+File _getOutPutFile(String path, [bool overwrite = false]) {
   var file = new File(path);
 
   if (file.existsSync() && !overwrite)
-    throw new Exception("File ${path} exists but overwrite flag is of");
+    throw new Exception("File ${path} exists but overwrite flag is off");
 
   return file;
 }

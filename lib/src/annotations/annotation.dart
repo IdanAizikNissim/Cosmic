@@ -1,3 +1,5 @@
+part of cosmic;
+
 class Annotation {
   final bool _once;
 

@@ -2,14 +2,25 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 library cosmic;
 
-export 'package:cosmic/src/annotations/client.dart';
-export 'package:cosmic/src/annotations/data.dart';
-export 'package:cosmic/src/annotations/http_methods.dart';
-export 'src/service.dart';
+import 'dart:mirrors';
+import 'dart:async';
+import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
+import 'package:cosmic/converters/cosmic_converters.dart';
 
-import 'src/gen.dart';
-import 'src/service.dart';
-import 'src/parser.dart';
+part 'src/service.dart';
+part 'src/gen.dart';
+part 'src/utils.dart';
+part 'src/annotations/annotation.dart';
+part 'src/annotations/client.dart';
+part 'src/annotations/data.dart';
+part 'src/annotations/http_method.dart';
+part 'src/annotations/http_methods.dart';
+part 'src/http_provider.dart';
+part 'src/parser.dart';
+part 'src/converter.dart';
+part 'src/type_provider.dart';
 
 class Cosmic {
   static create(Service service) {

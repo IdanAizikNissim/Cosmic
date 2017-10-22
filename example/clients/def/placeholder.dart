@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:cosmic/converters/cosmic_converters.dart';
 import 'package:cosmic/cosmic.dart';
 import 'package:http/http.dart' as http;
 import '../../entities/post.dart' as entity;
 
-@Client("https://jsonplaceholder.typicode.com")
+@Client(
+  path: "https://jsonplaceholder.typicode.com",
+  converter: const JsonConverter()
+)
 class PlaceholderClient extends Service {
 
   @Get("/posts")

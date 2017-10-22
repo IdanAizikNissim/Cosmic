@@ -14,7 +14,10 @@ A simple usage example:
         Map<String, double> rates;
     }
       
-    @Client("http://api.fixer.io")
+    @Client(
+      "http://api.fixer.io", 
+      converter: const JsonConverter()
+    )
     class FixerClient extends Service{
       @Get("/latest")
       Future<Fixer> latest({@Query("base") String base = "USD"});

@@ -1,4 +1,4 @@
-import 'annotation.dart';
+part of cosmic;
 
 class HttpMethod extends Annotation {
   final String _path;
