@@ -6,7 +6,10 @@ Simple work with REST JSON API for DART
 
 A simple usage example:  
 
-    import 'package:cosmic/cosmic.dart';   
+    import 'package:http/http.dart' as http;
+    import 'package:cosmic/converters/cosmic_converters.dart';
+    import 'package:cosmic/annotations/cosmic_annotations.dart';
+    import 'package:cosmic/cosmic.dart' as Cosmic;   
       
     class Fixer {
         String base;
@@ -18,7 +21,7 @@ A simple usage example:
       "http://api.fixer.io", 
       converter: const JsonConverter()
     )
-    class FixerClient extends Service{
+    class FixerClient extends Cosmic.Client {
       @Get("/latest")
       Future<Fixer> latest({@Query("base") String base = "USD"});
     }   

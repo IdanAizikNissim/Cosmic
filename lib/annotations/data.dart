@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_annotations;
 
 class Url extends Annotation {
   final String _url;
