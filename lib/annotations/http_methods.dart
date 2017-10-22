@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_annotations;
 
 class Get extends HttpMethod {
   const Get(String path) : super(path);

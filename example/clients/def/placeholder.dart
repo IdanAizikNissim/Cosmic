@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cosmic/converters/cosmic_converters.dart';
-import 'package:cosmic/cosmic.dart';
+import 'package:cosmic/annotations/cosmic_annotations.dart';
+import 'package:cosmic/cosmic.dart' as Cosmic;
 import 'package:http/http.dart' as http;
 import '../../entities/post.dart' as entity;
 
@@ -8,7 +9,7 @@ import '../../entities/post.dart' as entity;
   path: "https://jsonplaceholder.typicode.com",
   converter: const JsonConverter()
 )
-class PlaceholderClient extends Service {
+class PlaceholderClient extends Cosmic.Client {
 
   @Get("/posts")
   Future<List<entity.Post>> getPosts();

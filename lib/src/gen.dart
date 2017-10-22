@@ -1,18 +1,18 @@
 part of cosmic;
 
 class Gen {
-  static String generate(Service service, List<String> imports, String outputPath) {
+  static String generate(Client client, List<String> imports, String outputPath) {
     List<String> methods = new List();
-    service.values.forEach((sym, provider) {
+    client.values.forEach((sym, provider) {
       methods.add(
         _generateHttpMethod(getSymbolName(sym), provider)
       );
     });
 
-    final provider = service.values.values.toList().first;
+    final provider = client.values.values.toList().first;
 
     return _wrapWithClass(
-      getSymbolName(reflectType(service.runtimeType).simpleName),
+      getSymbolName(reflectType(client.runtimeType).simpleName),
       imports,
       outputPath,
       provider.converterName,
@@ -32,10 +32,10 @@ class Gen {
     return '''
     import 'dart:async';
     import 'package:http/http.dart' as http;
-    import 'package:cosmic/cosmic.dart' show TypeProvider;
+    import 'package:cosmic/cosmic.dart' show Client, TypeProvider;
     import 'package:${converterPackage != null ? "$converterPackage'" : "cosmic/converters/cosmic_converters.dart' show $converterName"};
     ${imports.map((import) => "import '${path.relative((import as Uri).path, from: outputPath)}';").toList().join()}
-    class $serviceName {
+    class $serviceName extends Client {
     final converter = const $converterName();\n
     ${methods.join('\n')}
     \n
@@ -111,7 +111,7 @@ class Gen {
     ''';
   }
 
-  static _getWrapFuncParams(List<Path> pathParams, List<Query> queryParams, HeaderMap header, Body body) {
+  static _getWrapFuncParams(List<ANTN.Path> pathParams, List<ANTN.Query> queryParams, ANTN.HeaderMap header, ANTN.Body body) {
     List<String> params = pathParams.map((p) => p.param).toList();
     params.addAll(queryParams.map((q) => q.query).toList());
 
@@ -126,15 +126,15 @@ class Gen {
     return params.join(",");
   }
 
-  static _addHeaderIfExists(HeaderMap headerMap) {
+  static _addHeaderIfExists(ANTN.HeaderMap headerMap) {
     return headerMap == null ? '' : ', headers: ${headerMap.name}';
   }
 
-  static String _addBodyIfExists(Body body) {
+  static String _addBodyIfExists(ANTN.Body body) {
     return body == null ? '' : ', body: converter.encode(${body.name}),';
   }
 
-  static String _getPath(String basePath, List<Path> pathParams, List<Query> queryParams) {
+  static String _getPath(String basePath, List<ANTN.Path> pathParams, List<ANTN.Query> queryParams) {
     for (var pathParam in pathParams) {
       basePath = basePath.replaceFirst("{${pathParam.param}}", "\$${pathParam.param}");
     }

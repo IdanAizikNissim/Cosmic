@@ -97,7 +97,7 @@ Future<dynamic> _execute(int port, Uri path, String serviceClass,  String output
 
 Future _isolateLoader(List args) async {
   return Isolate.spawnUri(
-      Uri.parse(args[0]), // service.dart
+      Uri.parse(args[0]), // client.dart
       [args[3], args[4]], // ServiceClassName
       args[1] as SendPort,
       onError: args[2] as SendPort,

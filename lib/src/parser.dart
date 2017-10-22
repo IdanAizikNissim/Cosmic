@@ -5,9 +5,9 @@ class Parser {
 
   List<String> get errors => _errors;
 
-  parse(Service service) {
+  parse(Client client) {
     // Check if client is annotated with @Client
-    final clientAnnotation = _getAnnotated(reflectClass(service.runtimeType), Client);
+    final clientAnnotation = _getAnnotated(reflectClass(client.runtimeType), ANTN.Client);
     if (clientAnnotation == null) {
       return null;
     } else {
@@ -20,17 +20,17 @@ class Parser {
         clientAnnotation.converter,
         converterName,
         !isCosmicConverter(converterPackage) ? converterPackage : null,
-        service
+        client
       );
 
-      return service;
+      return client;
     }
   }
 
   void _bootstrapHttpMethods(
-    String path, Converter converter, String converterName, String converterPackage, service
+    String path, Converter converter, String converterName, String converterPackage, Client client
   ) {
-    var im = reflect(service);
+    var im = reflect(client);
     var cm = im.type;
 
     // Get instance methods
@@ -43,31 +43,32 @@ class Parser {
         List<ParameterMirror> params = (declaration as MethodMirror).parameters;
 
         // Url param
-        var url = _getDataAnnotatedParams(params, Url);
+        var url = _getDataAnnotatedParams(params, ANTN.Url);
 
         // Body param
-        var body = _getDataAnnotatedParams(params, Body);
+        var body = _getDataAnnotatedParams(params, ANTN.Body);
 
         // HeaderMap
-        var headerMap = _getDataAnnotatedParams(params, HeaderMap);
+        var headerMap = _getDataAnnotatedParams(params, ANTN.HeaderMap);
 
         // Get return type
         List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
 
-        service._add(
+        client._add(
           methodName,
           new HttpProvider(
             httpMethod,
             path,
-            _getDataAnnotatedParams(params, Path),
-            _getDataAnnotatedParams(params, Query),
+            _getDataAnnotatedParams(params, ANTN.Path),
+            _getDataAnnotatedParams(params, ANTN.Query),
             headerMap.length != 0 ? headerMap.first : null,
             body.length != 0 ? body.first : null,
             url.length != 0 ? url.first : null,
             returns.length != 0 ? returns.first.reflectedType : null,
             converter,
             converterName,
-            converterPackage
+            converterPackage,
+            client._getMiddlewares(httpMethod.path)
           )
         );
       }
@@ -90,7 +91,7 @@ class Parser {
 
   _isHttpMethod(declaration) {
     if (declaration is MethodMirror && declaration.isAbstract) {
-      for (Type method in HttpMethods) {
+      for (Type method in ANTN.HttpMethods) {
         final httpMethodAnnotation = _getAnnotated(declaration, method);
 
         if (httpMethodAnnotation != null) return httpMethodAnnotation;
@@ -110,7 +111,7 @@ class Parser {
   // Returns the annotated props
   // if multiple annotated but marked as once return null
   List<dynamic> _getAnnotateds(DeclarationMirror dm, Type type) {
-    Annotation annotation = _getAnnotationInstance(type);
+    ANTN.Annotation annotation = _getAnnotationInstance(type);
 
     if (annotation == null) {
       _addError("${reflectType(type).qualifiedName} is invalid annotation");
@@ -130,8 +131,8 @@ class Parser {
     return annotations.map((annotation) => annotation.reflectee).toList();
   }
 
-  Annotation _getAnnotationInstance(Type type) {
-    Annotation annotation;
+  ANTN.Annotation _getAnnotationInstance(Type type) {
+    ANTN.Annotation annotation;
     var typeMirror = reflectType(type);
 
     // Check if type is an Annotation
@@ -141,33 +142,33 @@ class Parser {
       final typeName = (typeMirror as ClassMirror).qualifiedName;
 
       // Client
-      if (typeName == reflectType(Client).qualifiedName) {
-        annotation = new Client(path: "", converter: null);
+      if (typeName == reflectType(ANTN.Client).qualifiedName) {
+        annotation = new ANTN.Client(path: "", converter: null);
       }
       // HttpMethod
       else if ((typeMirror as ClassMirror).superclass != null &&
-          (typeMirror as ClassMirror).superclass.qualifiedName == reflectType(HttpMethod).qualifiedName) {
-        annotation = new HttpMethod("");
+          (typeMirror as ClassMirror).superclass.qualifiedName == reflectType(ANTN.HttpMethod).qualifiedName) {
+        annotation = new ANTN.HttpMethod("");
       }
       // Path
-      else if (typeName == reflectType(Path).qualifiedName) {
-        annotation = new Path("");
+      else if (typeName == reflectType(ANTN.Path).qualifiedName) {
+        annotation = new ANTN.Path("");
       }
       // Query
-      else if (typeName == reflectType(Query).qualifiedName) {
-        annotation = new Query("");
+      else if (typeName == reflectType(ANTN.Query).qualifiedName) {
+        annotation = new ANTN.Query("");
       }
       // Url
-      else if (typeName == reflectType(Url).qualifiedName) {
-        annotation = new Url("");
+      else if (typeName == reflectType(ANTN.Url).qualifiedName) {
+        annotation = new ANTN.Url("");
       }
       // Body
-      else if (typeName == reflectType(Body).qualifiedName) {
-        annotation = new Body("");
+      else if (typeName == reflectType(ANTN.Body).qualifiedName) {
+        annotation = new ANTN.Body("");
       }
       // HeaderMap
-      else if (typeName == reflectType(HeaderMap).qualifiedName) {
-        annotation = new HeaderMap("");
+      else if (typeName == reflectType(ANTN.HeaderMap).qualifiedName) {
+        annotation = new ANTN.HeaderMap("");
       }
     }
 
