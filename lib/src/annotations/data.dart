@@ -1,4 +1,4 @@
-import 'annotation.dart';
+part of cosmic;
 
 class Url extends Annotation {
   final String _url;

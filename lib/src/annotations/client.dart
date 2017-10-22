@@ -1,4 +1,4 @@
-import 'annotation.dart';
+part of cosmic;
 
 class Client extends Annotation {
   final String _path;

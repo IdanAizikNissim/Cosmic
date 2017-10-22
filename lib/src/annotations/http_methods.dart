@@ -1,4 +1,4 @@
-import 'http_method.dart';
+part of cosmic;
 
 class Get extends HttpMethod {
   const Get(String path) : super(path);

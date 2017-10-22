@@ -1,12 +1,4 @@
-import 'dart:async';
-
-import 'package:http/http.dart' as http;
-import 'package:jsonx/jsonx.dart';
-
-import 'annotations/http_method.dart';
-import 'annotations/http_methods.dart';
-import 'annotations/data.dart';
-import 'utils.dart';
+part of cosmic;
 
 class HttpProvider {
   HttpMethod _method;

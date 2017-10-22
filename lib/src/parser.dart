@@ -1,12 +1,4 @@
-import 'dart:mirrors';
-import 'http_provider.dart';
-
-import 'annotations/annotation.dart';
-import 'annotations/client.dart';
-import 'annotations/data.dart';
-import 'annotations/http_method.dart';
-import 'annotations/http_methods.dart';
-import 'service.dart';
+part of cosmic;
 
 class Parser {
   final List<String> _errors = new List();
@@ -50,7 +42,7 @@ class Parser {
         // Get return type
         List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
 
-        service.add(
+        service._add(
           methodName,
           new HttpProvider(
               httpMethod,

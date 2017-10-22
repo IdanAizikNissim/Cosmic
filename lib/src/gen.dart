@@ -1,10 +1,4 @@
-import 'dart:mirrors';
-
-import 'package:path/path.dart' as path;
-import 'package:cosmic/src/annotations/data.dart';
-import 'package:cosmic/src/http_provider.dart';
-import 'package:cosmic/src/service.dart';
-import 'package:cosmic/src/utils.dart';
+part of cosmic;
 
 class Gen {
   static String generate(Service service, List<String> imports, String outputPath) {
