@@ -3,32 +3,30 @@
 library cosmic;
 
 import 'dart:mirrors';
-import 'dart:async';
 import 'package:meta/meta.dart';
+import 'dart:async';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 import 'package:cosmic/converters/cosmic_converters.dart';
+import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
+import 'dart:convert' show Encoding, UTF8;
 
-part 'src/service.dart';
+part 'src/client.dart';
 part 'src/gen.dart';
 part 'src/utils.dart';
-part 'src/annotations/annotation.dart';
-part 'src/annotations/client.dart';
-part 'src/annotations/data.dart';
-part 'src/annotations/http_method.dart';
-part 'src/annotations/http_methods.dart';
 part 'src/http_provider.dart';
 part 'src/parser.dart';
 part 'src/converter.dart';
 part 'src/type_provider.dart';
+part 'src/middleware.dart';
 
 class Cosmic {
-  static create(Service service) {
+  static create(Client client) {
     Parser parser = new Parser();
-    return parser.parse(service);
+    return parser.parse(client);
   }
 
-  static String generate(Service service, List<String> imports, String outputPath) {
-    return Gen.generate(create(service), imports, outputPath);
+  static String generate(Client client, List<String> imports, String outputPath) {
+    return Gen.generate(create(client), imports, outputPath);
   }
 }

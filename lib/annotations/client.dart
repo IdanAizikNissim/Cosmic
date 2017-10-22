@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_annotations;
 
 class Client extends Annotation {
   final String path;

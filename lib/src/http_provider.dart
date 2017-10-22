@@ -1,31 +1,33 @@
 part of cosmic;
 
 class HttpProvider {
-  HttpMethod _method;
+  ANTN.HttpMethod _method;
   String _path;
-  List<Path> _pathParams;
-  List<Query> _queryParams;
-  HeaderMap _headerMap;
-  Body _body;
-  Url _url;
+  List<ANTN.Path> _pathParams;
+  List<ANTN.Query> _queryParams;
+  ANTN.HeaderMap _headerMap;
+  ANTN.Body _body;
+  ANTN.Url _url;
   Type _returns;
   Converter _converter;
   String _converterName;
   String _converterPackage;
+  List<Middleware> _middlewares;
 
-  HttpMethod get method => _method;
+  ANTN.HttpMethod get method => _method;
   String get path => _path;
-  List<Path> get pathParams => _pathParams;
-  List<Query> get queryParams => _queryParams;
-  HeaderMap get headerMap => _headerMap;
-  Body get body => _body;
-  Url get url => _url;
+  List<ANTN.Path> get pathParams => _pathParams;
+  List<ANTN.Query> get queryParams => _queryParams;
+  ANTN.HeaderMap get headerMap => _headerMap;
+  ANTN.Body get body => _body;
+  ANTN.Url get url => _url;
   Type get returns => _returns;
   Converter get converter => _converter;
   String get converterName => _converterName;
   String get converterPackage => _converterPackage;
+  List<Middleware> get middlewares => _middlewares;
 
-  HttpProvider(this._method, path, [
+  HttpProvider(this._method, this._path, [
     this._pathParams,
     this._queryParams,
     this._headerMap,
@@ -34,14 +36,16 @@ class HttpProvider {
     this._returns,
     this._converter,
     this._converterName,
-    this._converterPackage
+    this._converterPackage,
+    this._middlewares
   ]) {
     assert(_converter != null);
-
-    this._path = _getPath(path, _method, url: _url);
+    assert(_method != null);
+    assert(_path != null);
   }
 
   call(Map<Symbol, dynamic> namedArguments) {
+    _path =_getPath(_path, _method);
     _injectPathParams(namedArguments);
     _concatQueryParams(namedArguments);
 
@@ -51,31 +55,31 @@ class HttpProvider {
 
     // Get header map
     Map<String, String> headers =
-      _headerMap != null ? _getHeaderMapParam(namedArguments) : null;
+      _headerMap != null ? _getHeaderMapParam(namedArguments) : {};
 
     switch (this._method.runtimeType) {
-      case Get:
+      case ANTN.Get:
         return _get(headers: headers);
-      case Post:
+      case ANTN.Post:
         return _post(body: body, headers: headers);
-      case Put:
-      case Patch:
+      case ANTN.Put:
+      case ANTN.Patch:
         return _put(body: body, headers: headers);
-      case Delete:
+      case ANTN.Delete:
         return _delete(headers: headers);
-      case Head:
+      case ANTN.Head:
         return _head(headers: headers);
     }
   }
 
   String _getPath(String path, httpMethod, {
-    Url url
+    ANTN.Url url
   }) {
     return url != null ? url.url : "${path}${httpMethod.path}";
   }
 
   bool _isPathParam(String name) {
-    for (Path p in _pathParams) {
+    for (ANTN.Path p in _pathParams) {
       if (p.param == name) return true;
     }
 
@@ -83,7 +87,7 @@ class HttpProvider {
   }
 
   bool _isQueryParam(String name) {
-    for (Query q in _queryParams) {
+    for (ANTN.Query q in _queryParams) {
       if (q.query == name) return true;
     }
 
@@ -145,38 +149,44 @@ class HttpProvider {
   }
 
   Future<dynamic> _get({Map<String, String> headers}) {
-    return _request(http.get(_path, headers: headers));
+    return _callMiddleware(
+      new Request(_path, http.get, ANTN.Get, headers: headers)
+    );
   }
 
   Future<dynamic> _post({body, Map<String, String> headers}) {
-    return _request(
-      http.post(
+    return _callMiddleware(
+      new Request(
         _path,
-        body: body != null ? _converter.encode(body) : null,
-        headers: headers
+        http.post,
+        ANTN.Post,
+        headers: headers,
+        body: body != null ? _converter.encode(body) : null
       )
     );
   }
 
   Future<dynamic> _put({body, Map<String, String> headers}) {
-    return _request(
-      http.put(
+    return _callMiddleware(
+      new Request(
         _path,
-        body: body != null ? _converter.encode(body) : null,
-        headers: headers
+        http.put,
+        ANTN.Put,
+        headers: headers,
+        body: body != null ? _converter.encode(body) : null
       )
     );
   }
 
   Future<dynamic> _delete({Map<String, String> headers}) {
-    return _request(
-      http.delete(_path, headers: headers)
+    return _callMiddleware(
+        new Request(_path, http.delete, ANTN.Delete, headers: headers)
     );
   }
 
   Future<dynamic> _head({Map<String, String> headers}) {
-    return _request(
-      http.head(_path, headers: headers)
+    return _callMiddleware(
+      new Request(_path, http.head, ANTN.Head, headers: headers)
     );
   }
 
@@ -194,6 +204,18 @@ class HttpProvider {
         );
       }
     }).catchError((error) => completer.completeError(error));
+
+    return completer.future;
+  }
+
+  Future<dynamic> _callMiddleware(Request request, {int index = 0, Completer completer}) async {
+    completer = completer?? new Completer();
+
+    if (index >= _middlewares.length) {
+      completer.complete(await _request(request.bind()));
+    } else {
+      _middlewares[index](request, () => _callMiddleware(request, index: index + 1, completer: completer));
+    }
 
     return completer.future;
   }
