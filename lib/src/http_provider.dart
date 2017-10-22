@@ -27,7 +27,7 @@ class HttpProvider {
   String get converterPackage => _converterPackage;
   List<Middleware> get middlewares => _middlewares;
 
-  HttpProvider(this._method, path, [
+  HttpProvider(this._method, this._path, [
     this._pathParams,
     this._queryParams,
     this._headerMap,
@@ -40,11 +40,12 @@ class HttpProvider {
     this._middlewares
   ]) {
     assert(_converter != null);
-
-    this._path = _getPath(path, _method, url: _url);
+    assert(_method != null);
+    assert(_path != null);
   }
 
   call(Map<Symbol, dynamic> namedArguments) {
+    _path =_getPath(_path, _method);
     _injectPathParams(namedArguments);
     _concatQueryParams(namedArguments);
 
@@ -211,7 +212,7 @@ class HttpProvider {
     completer = completer?? new Completer();
 
     if (index >= _middlewares.length) {
-      completer.complete(await _request(request._bind()));
+      completer.complete(await _request(request.bind()));
     } else {
       _middlewares[index](request, () => _callMiddleware(request, index: index + 1, completer: completer));
     }

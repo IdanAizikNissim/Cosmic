@@ -20,9 +20,10 @@ class Request {
     assert(_url != null);
     assert(_httpCall != null);
     assert(_httpMethod != null);
+    this.headers = this.headers?? {};
   }
 
-  dynamic _bind() {
+  dynamic bind() {
     encoding = encoding?? UTF8;
 
     // Bind httpCall to params

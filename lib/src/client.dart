@@ -17,8 +17,8 @@ abstract class Client {
   }
 
   //  Middleware
-
-  List<Middleware> _getMiddlewares(@required String path) {
+  @protected
+  List<Middleware> getMiddlewares(@required String path) {
     assert(path != null);
     final use = middlewares[path]?? [];
     use.addAll(middlewares[""]?? []);

@@ -68,7 +68,7 @@ class Parser {
             converter,
             converterName,
             converterPackage,
-            client._getMiddlewares(httpMethod.path)
+            client.getMiddlewares(httpMethod.path)
           )
         );
       }

@@ -1,38 +1,3 @@
-// Copyright (c) 2017, Idan Aizik-Nissim. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
-
-//import 'clients/impl/placeholder.dart';
-//import 'entities/post.dart';
-
-//main() async {
-//  PlaceholderClient client = new PlaceholderClient();
-//
-//  client.use((request, next) {
-//    print(request.url);
-//  });
-//
-//  var posts = await client.getPosts();
-//  posts.forEach((post) => print(post.id));
-//
-//  var post = await client.getPost(33, null);
-//  print(post.id);
-//
-//  var newPost = new Post()
-//    ..body = "Hello"
-//    ..title = "World"
-//    ..userId = 1;
-//
-//  var res = await client.create(post);
-//  newPost.id = res.id;
-//  print(newPost.id);
-//
-//  var result = await client.delete(10);
-//  print("${result.statusCode} ${result.body}");
-//
-//  var updateRes = await client.update(5, newPost);
-//  print("${updateRes.id} ${updateRes.title}");
-//}
-
 import 'clients/def/placeholder.dart';
 import 'package:cosmic/cosmic.dart';
 import 'entities/post.dart' as entity;
