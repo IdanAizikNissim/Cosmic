@@ -1,12 +1,4 @@
-import 'dart:async';
-
-import 'package:http/http.dart' as http;
-import 'package:jsonx/jsonx.dart';
-
-import 'annotations/http_method.dart';
-import 'annotations/http_methods.dart';
-import 'annotations/data.dart';
-import 'utils.dart';
+part of cosmic;
 
 class HttpProvider {
   HttpMethod _method;
@@ -17,6 +9,9 @@ class HttpProvider {
   Body _body;
   Url _url;
   Type _returns;
+  Converter _converter;
+  String _converterName;
+  String _converterPackage;
 
   HttpMethod get method => _method;
   String get path => _path;
@@ -26,6 +21,9 @@ class HttpProvider {
   Body get body => _body;
   Url get url => _url;
   Type get returns => _returns;
+  Converter get converter => _converter;
+  String get converterName => _converterName;
+  String get converterPackage => _converterPackage;
 
   HttpProvider(this._method, path, [
     this._pathParams,
@@ -33,8 +31,13 @@ class HttpProvider {
     this._headerMap,
     this._body,
     this._url,
-    this._returns
+    this._returns,
+    this._converter,
+    this._converterName,
+    this._converterPackage
   ]) {
+    assert(_converter != null);
+
     this._path = _getPath(path, _method, url: _url);
   }
 
@@ -149,7 +152,7 @@ class HttpProvider {
     return _request(
       http.post(
         _path,
-        body: body != null ? encode(body) : null,
+        body: body != null ? _converter.encode(body) : null,
         headers: headers
       )
     );
@@ -159,7 +162,7 @@ class HttpProvider {
     return _request(
       http.put(
         _path,
-        body: body != null ? encode(body) : null,
+        body: body != null ? _converter.encode(body) : null,
         headers: headers
       )
     );
@@ -187,7 +190,7 @@ class HttpProvider {
         completer.completeError(response);
       } else {
         completer.complete(
-            decode(response.body, type: _returns)
+          _converter.decode(response.body, type: _returns)
         );
       }
     }).catchError((error) => completer.completeError(error));

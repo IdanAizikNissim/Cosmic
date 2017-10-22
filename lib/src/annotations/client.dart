@@ -1,9 +1,8 @@
-import 'annotation.dart';
+part of cosmic;
 
 class Client extends Annotation {
-  final String _path;
+  final String path;
+  final Converter converter;
 
-  const Client(this._path) : super(true);
-
-  get path => _path;
+  const Client({@required this.path, @required this.converter}) : super(true);
 }
