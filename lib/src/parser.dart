@@ -11,13 +11,25 @@ class Parser {
     if (clientAnnotation == null) {
       return null;
     } else {
-      _bootstrapHttpMethods(clientAnnotation.path, service);
+      final converterClassMirror = reflect(clientAnnotation.converter).type;
+      final converterName = getSymbolName(converterClassMirror.simpleName);
+      final converterPackage = converterClassMirror.location.sourceUri.path;
+
+      _bootstrapHttpMethods(
+        clientAnnotation.path,
+        clientAnnotation.converter,
+        converterName,
+        !isCosmicConverter(converterPackage) ? converterPackage : null,
+        service
+      );
 
       return service;
     }
   }
 
-  void _bootstrapHttpMethods(String path, service) {
+  void _bootstrapHttpMethods(
+    String path, Converter converter, String converterName, String converterPackage, service
+  ) {
     var im = reflect(service);
     var cm = im.type;
 
@@ -45,14 +57,17 @@ class Parser {
         service._add(
           methodName,
           new HttpProvider(
-              httpMethod,
-              path,
-              _getDataAnnotatedParams(params, Path),
-              _getDataAnnotatedParams(params, Query),
-              headerMap.length != 0 ? headerMap.first : null,
-              body.length != 0 ? body.first : null,
-              url.length != 0 ? url.first : null,
-              returns.length != 0 ? returns.first.reflectedType : null
+            httpMethod,
+            path,
+            _getDataAnnotatedParams(params, Path),
+            _getDataAnnotatedParams(params, Query),
+            headerMap.length != 0 ? headerMap.first : null,
+            body.length != 0 ? body.first : null,
+            url.length != 0 ? url.first : null,
+            returns.length != 0 ? returns.first.reflectedType : null,
+            converter,
+            converterName,
+            converterPackage
           )
         );
       }
@@ -127,7 +142,7 @@ class Parser {
 
       // Client
       if (typeName == reflectType(Client).qualifiedName) {
-        annotation = new Client("");
+        annotation = new Client(path: "", converter: null);
       }
       // HttpMethod
       else if ((typeMirror as ClassMirror).superclass != null &&

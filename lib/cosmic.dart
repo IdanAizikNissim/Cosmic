@@ -4,9 +4,10 @@ library cosmic;
 
 import 'dart:mirrors';
 import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
-import 'package:jsonx/jsonx.dart';
+import 'package:cosmic/converters/cosmic_converters.dart';
 
 part 'src/service.dart';
 part 'src/gen.dart';
@@ -18,6 +19,8 @@ part 'src/annotations/http_method.dart';
 part 'src/annotations/http_methods.dart';
 part 'src/http_provider.dart';
 part 'src/parser.dart';
+part 'src/converter.dart';
+part 'src/type_provider.dart';
 
 class Cosmic {
   static create(Service service) {

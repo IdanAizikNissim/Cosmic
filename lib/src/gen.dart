@@ -5,24 +5,38 @@ class Gen {
     List<String> methods = new List();
     service.values.forEach((sym, provider) {
       methods.add(
-          _generateHttpMethod(getSymbolName(sym), provider)
+        _generateHttpMethod(getSymbolName(sym), provider)
       );
     });
 
+    final provider = service.values.values.toList().first;
+
     return _wrapWithClass(
       getSymbolName(reflectType(service.runtimeType).simpleName),
-      imports, outputPath,
+      imports,
+      outputPath,
+      provider.converterName,
+      provider.converterPackage,
       methods
     );
   }
 
-  static String _wrapWithClass(String serviceName, List<String> imports, String outputPath, List<String> methods) {
+  static String _wrapWithClass(
+    String serviceName,
+    List<String> imports,
+    String outputPath,
+    String converterName,
+    String converterPackage,
+    List<String> methods
+  ) {
     return '''
     import 'dart:async';
     import 'package:http/http.dart' as http;
-    import 'package:jsonx/jsonx.dart';
+    import 'package:cosmic/cosmic.dart' show TypeProvider;
+    import 'package:${converterPackage != null ? "$converterPackage'" : "cosmic/converters/cosmic_converters.dart' show $converterName"};
     ${imports.map((import) => "import '${path.relative((import as Uri).path, from: outputPath)}';").toList().join()}
     class $serviceName {
+    final converter = const $converterName();\n
     ${methods.join('\n')}
     \n
     ${_requestWrapperMethod()}
@@ -61,7 +75,7 @@ class Gen {
       if (!genericWrap) {
         return r;
       } else {
-        return "const TypeHelper<$r>().type";
+        return "const TypeProvider<$r>().type";
       }
     }
   }
@@ -87,7 +101,7 @@ class Gen {
           completer.completeError(response);
         } else {
           completer.complete(
-              decode(response.body, type: returnType)
+            converter.decode(response.body, type: returnType)
           );
         }
       }).catchError((error) => completer.completeError(error));
@@ -117,7 +131,7 @@ class Gen {
   }
 
   static String _addBodyIfExists(Body body) {
-    return body == null ? '' : ', body: encode(${body.name}),';
+    return body == null ? '' : ', body: converter.encode(${body.name}),';
   }
 
   static String _getPath(String basePath, List<Path> pathParams, List<Query> queryParams) {
