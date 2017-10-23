@@ -16,6 +16,12 @@ class Request {
   String get url => _url;
   Type get httpMethod => _httpMethod;
 
+  bool get isGet => _httpMethod == ANTN.Get;
+  bool get isPost => _httpMethod == ANTN.Post;
+  bool get isPut => _httpMethod == ANTN.Put;
+  bool get isPatch => _httpMethod == ANTN.Patch;
+  bool get isDelete => _httpMethod == ANTN.Delete;
+
   Request(this._url, this._httpCall, this._httpMethod, {this.body, this.headers, this.encoding}) {
     assert(_url != null);
     assert(_httpCall != null);
