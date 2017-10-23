@@ -4,10 +4,13 @@ import 'entities/post.dart';
 main() async {
   PlaceholderClient client = new PlaceholderClient()
     ..use((request, next) {
-      print("${request.httpMethod} ${request.url}");
-      request.headers["hello"] = "world";
+      if (request.isPost) {
+        print("${request.httpMethod} ${request.url}");
+        request.headers["hello"] = "world";
+      }
+
       next();
-    });
+    }, path: "/posts/{id}");
 
   var posts = await client.getPosts();
   posts.forEach((post) => print(post.id));

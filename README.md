@@ -30,6 +30,30 @@ A simple usage example:
       Fixer latest = await fixerClient.latest();
       print(latest.date);
     }
+    
+A middleware:
+
+    FixerClient client = new FixerClient()
+      ..use((request, next) {
+        print("${request.httpMethod} ${request.url}");
+        request.headers["token"] = "12345";
+        next();
+      });
+      
+A converter:
+
+    import 'package:jsonx/jsonx.dart' as jsonx;
+    
+    class JsonConverter extends Converter {
+      const JsonConverter();
+    
+      @override
+      dynamic decode(String data, {Type type}) => jsonx.decode(data, type: type);
+    
+      @override
+      String encode(object) => jsonx.encode(object);
+    }
+    
 (check example/placeholder_client.dart for more)
 
 ## Generate
