@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:cosmic/cosmic.dart'
+import 'package:cosmic/cosmic_lib.dart'
     show Client, Request, TypeProvider, Middleware;
 import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
 import 'package:cosmic/converters/cosmic_converters.dart' show JsonConverter;

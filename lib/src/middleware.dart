@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_lib;
 
 typedef void Middleware(
   @required Request request,

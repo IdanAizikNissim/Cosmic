@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_lib;
 
 String getSymbolName(Symbol symbol) {
   Iterable<Match> matches = new RegExp(r'"\s*([^"]*)\s*"').allMatches(symbol.toString());

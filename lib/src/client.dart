@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_lib;
 
 abstract class Client {
   final Map<String, List<Middleware>> middlewares = {};
@@ -7,7 +7,7 @@ abstract class Client {
 
   Map<Symbol, dynamic> get values => _values;
 
-  _add(String key, dynamic value) {
+  add(String key, dynamic value) {
     _keys[new Symbol(key)] = key;
     _values[new Symbol(key)] = value;
   }

@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_lib;
 
 abstract class Converter {
   const Converter();
