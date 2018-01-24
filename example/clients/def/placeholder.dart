@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cosmic/converters/cosmic_converters.dart';
 import 'package:cosmic/annotations/cosmic_annotations.dart';
-import 'package:cosmic/cosmic.dart' as Cosmic;
+import 'package:cosmic/cosmic_lib.dart' as Cosmic;
 import 'package:http/http.dart' as http;
 import '../../entities/post.dart' as entity;
 

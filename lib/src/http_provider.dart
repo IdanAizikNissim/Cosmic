@@ -1,4 +1,4 @@
-part of cosmic;
+part of cosmic_lib;
 
 class HttpProvider {
   ANTN.HttpMethod _method;

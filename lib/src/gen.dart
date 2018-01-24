@@ -34,7 +34,7 @@ class Gen {
     return '''
     import 'dart:async';
     import 'package:http/http.dart' as http;
-    import 'package:cosmic/cosmic.dart' show Client, Request, TypeProvider, Middleware;
+    import 'package:cosmic/cosmic_lib.dart' show Client, Request, TypeProvider, Middleware;
     import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
     import 'package:${converterPackage != null ? "$converterPackage'" : "cosmic/converters/cosmic_converters.dart' show $converterName"};
     ${imports.map((import) => "import '${path.relative((import as Uri).path, from: outputPath)}';").toList().join()}

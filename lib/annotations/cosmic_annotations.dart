@@ -1,7 +1,7 @@
 library cosmic_annotations;
 
 import 'package:meta/meta.dart';
-import 'package:cosmic/cosmic.dart' show Converter;
+import 'package:cosmic/cosmic_lib.dart' show Converter;
 
 part 'client.dart';
 part 'data.dart';

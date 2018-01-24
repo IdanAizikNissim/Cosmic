@@ -54,7 +54,7 @@ class Parser {
         // Get return type
         List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
 
-        client._add(
+        client.add(
           methodName,
           new HttpProvider(
             httpMethod,
