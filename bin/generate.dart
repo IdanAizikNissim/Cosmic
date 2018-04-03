@@ -17,13 +17,17 @@ main(List<String> arguments) async {
 
   assert(args[ARG_OPTION_INPUT] != null);
   assert(args[ARG_OPTION_SERVICE_CLASS] != null);
-  assert(args[ARG_OPTION_OUTPUT] != null);
 
-  var inputFilePath = absolute(args[ARG_OPTION_INPUT]);
+  final String input = args[ARG_OPTION_INPUT];
+  var inputFilePath = absolute(input);
   File inputFile = _getInputFile(inputFilePath);
 
-  var outPutDir = absolute(args[ARG_OPTION_OUTPUT]);
-  var outPutFilePath = "${outPutDir}/${basename(inputFilePath)}";
+  final output = (args[ARG_OPTION_OUTPUT] != null) ? 
+    args[ARG_OPTION_OUTPUT] : 
+    input.substring(0, input.lastIndexOf('/'));
+
+  var outPutDir = absolute(output);
+  var outPutFilePath = "${outPutDir}/${basename(inputFilePath.replaceFirst('.', '.g.'))}";
 
   // Get output file
   File outputFile = _getOutPutFile(outPutFilePath, args[ARG_FLAG_OVERWRITE]);
@@ -32,7 +36,7 @@ main(List<String> arguments) async {
   _createOutputDir(outPutDir);
 
   // Get generated code
-  var generated = await _generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS], args[ARG_OPTION_OUTPUT]);
+  var generated = await _generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS], output);
   outputFile.openWrite();
   outputFile.writeAsString(new DartFormatter().format(generated.toString()));
 }
