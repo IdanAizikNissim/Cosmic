@@ -167,7 +167,7 @@ class Gen {
     for (var qParam in queryParams) {
       var sym = '&';
       if (firstQP) {
-        var sym = '?';
+        sym = '?';
         firstQP = false;
       }
 
