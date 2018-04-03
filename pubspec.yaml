@@ -1,7 +1,7 @@
 name: cosmic
 description: Simple work with REST JSON API
-version: 0.0.4
-homepage: https://gitlab.com/idan-aizik-nissim/dart-cosmic
+version: 0.0.5
+homepage: https://github.com/IdanAizikNissim/Cosmic
 author: Idan Aizik-Nissim <idan.aizik.nissim@gmail.com>
 
 environment:
