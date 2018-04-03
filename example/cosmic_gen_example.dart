@@ -1,5 +1,5 @@
-import 'clients/impl/placeholder.dart';
-import 'entities/post.dart';
+import 'clients/placeholder.g.dart';
+import 'entities/post_entity.dart';
 
 main() async {
   PlaceholderClient client = new PlaceholderClient()
@@ -18,7 +18,7 @@ main() async {
   var post = await client.getPost(33, null);
   print(post.id);
 
-  var newPost = new Post()
+  var newPost = new PostEntity()
     ..body = "Hello"
     ..title = "World"
     ..userId = 1;

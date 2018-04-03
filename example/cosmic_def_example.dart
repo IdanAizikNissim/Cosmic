@@ -1,6 +1,6 @@
-import 'clients/def/placeholder.dart';
+import 'clients/placeholder.dart';
 import 'package:cosmic/cosmic.dart';
-import 'entities/post.dart' as entity;
+import 'entities/post_entity.dart';
 
 main() async {
   PlaceholderClient client = new PlaceholderClient()
@@ -24,7 +24,7 @@ main() async {
   posts.forEach((post) => print("${post.id} - ${post.title}"));
 
   // Create a new post
-  entity.Post post = new entity.Post()
+  PostEntity post = new PostEntity()
     ..title = "Hello From Dart Cosmic"
     ..body = "foo"
     ..userId = 1;

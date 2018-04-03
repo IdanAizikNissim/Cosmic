@@ -4,14 +4,14 @@ import 'package:cosmic/cosmic_lib.dart'
     show Client, Request, TypeProvider, Middleware;
 import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
 import 'package:cosmic/converters/cosmic_converters.dart' show JsonConverter;
-import '../../entities/post.dart';
+import '../entities/post_entity.dart';
 
 class PlaceholderClient extends Client {
   final url = "https://jsonplaceholder.typicode.com";
   final converter = const JsonConverter();
 
-  Future<List<Post>> getPosts() {
-    final Type returnType = const TypeProvider<List<Post>>().type;
+  Future<List<PostEntity>> getPosts() {
+    final Type returnType = const TypeProvider<List<PostEntity>>().type;
     final String path = "/posts";
 
     return _callMiddleware(
@@ -24,8 +24,8 @@ class PlaceholderClient extends Client {
         path);
   }
 
-  Future<Post> getPost(id, headers) {
-    final Type returnType = Post;
+  Future<PostEntity> getPost(id, headers) {
+    final Type returnType = PostEntity;
     final String path = "/posts/{id}";
 
     return _callMiddleware(
@@ -34,8 +34,8 @@ class PlaceholderClient extends Client {
         path);
   }
 
-  Future<Post> create(post) {
-    final Type returnType = Post;
+  Future<PostEntity> create(post) {
+    final Type returnType = PostEntity;
     final String path = "/posts";
 
     return _callMiddleware(
@@ -49,8 +49,8 @@ class PlaceholderClient extends Client {
         path);
   }
 
-  Future<Post> update(id, post) {
-    final Type returnType = Post;
+  Future<PostEntity> update(id, post) {
+    final Type returnType = PostEntity;
     final String path = "/posts/{id}";
 
     return _callMiddleware(
