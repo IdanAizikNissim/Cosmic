@@ -1,3 +1,9 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+// **************************************************************************
+// Generator: ClientGenerator
+// **************************************************************************
+
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:cosmic/cosmic_lib.dart'
