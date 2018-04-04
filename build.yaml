@@ -1,0 +1,9 @@
+# Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+builders:
+  cosmic_builder:
+    target: ":cosmic_builder"
+    import: "package:cosmic/src/builder.dart"
+    builder_factories: ["cosmicBuilder"]
+    build_extensions: {".dart": [".g.dart"]}
+    build_to: source
+    auto_apply: all_packages

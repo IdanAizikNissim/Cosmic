@@ -10,3 +10,4 @@ doc/api/
 
 .idea/
 dart/
+.dart_tool
