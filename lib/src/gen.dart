@@ -49,9 +49,9 @@ class Gen {
 
   static String _generateHttpMethod(String name, String path, HttpProvider provider) {
     String httpM = _httpMethodType(provider.method.runtimeType);
-
+    final definedReturnType = _defineReturnType(provider.returns);
     return '''
-    Future<${_defineReturnType(provider.returns)}> $name(${_getWrapFuncParams(provider.pathParams, provider.queryParams, provider.headerMap, provider.body)}) {
+    Future<$definedReturnType> $name(${_getWrapFuncParams(provider.pathParams, provider.queryParams, provider.headerMap, provider.body)}) {
       final Type returnType = ${_defineReturnType(provider.returns, true)};
       final String path = "$path";\n
       return _callMiddleware(
@@ -64,7 +64,7 @@ class Gen {
         ),
         returnType,
         path
-      );
+      ).then<$definedReturnType>((results) => results);
     }
     ''';
   }
