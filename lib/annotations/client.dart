@@ -5,4 +5,9 @@ class Client extends Annotation {
   final Converter converter;
 
   const Client({@required this.path, @required this.converter}) : super(true);
+
+  @override
+  Annotation clone(String type) {
+    return new Client(path: path, converter: converter);
+  }
 }

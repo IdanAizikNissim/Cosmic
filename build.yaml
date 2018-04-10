@@ -2,8 +2,8 @@
 builders:
   cosmic_builder:
     target: ":cosmic_builder"
-    import: "package:cosmic/src/builder.dart"
+    import: "package:cosmic/cosmic_lib.dart"
     builder_factories: ["cosmicBuilder"]
     build_extensions: {".dart": [".g.dart"]}
     build_to: source
-    auto_apply: all_packages
+    auto_apply: dependents

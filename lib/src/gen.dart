@@ -1,7 +1,7 @@
 part of cosmic;
 
 class Gen {
-  static String generate(Client client, List<String> imports, String outputPath) {
+  static String generate(Client client, String filename, List<String> imports, String outputPath) {
     List<String> methods = new List();
     client.values.forEach((sym, provider) {
       methods.add(
@@ -12,6 +12,7 @@ class Gen {
     final provider = client.values.values.toList().first;
 
     return _wrapWithClass(
+      filename,
       getSymbolName(reflectType(client.runtimeType).simpleName),
       imports,
       outputPath,
@@ -23,6 +24,7 @@ class Gen {
   }
 
   static String _wrapWithClass(
+    String filename,
     String serviceName,
     List<String> imports,
     String outputPath,
@@ -31,20 +33,16 @@ class Gen {
     List<String> methods,
     String url
   ) {
-    return '''
-    import 'dart:async';
-    import 'package:http/http.dart' as http;
-    import 'package:cosmic/cosmic_lib.dart' show Client, Request, TypeProvider, Middleware;
-    import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
-    import 'package:${converterPackage != null ? "$converterPackage'" : "cosmic/converters/cosmic_converters.dart' show $converterName"};
-    ${imports.map((import) => "import '${path.relative((import as Uri).path, from: outputPath)}';").toList().join()}
-    class $serviceName extends Client {
+    return '''  
+    part of '$filename.dart';
+    abstract class _\$$serviceName {
     final url = "$url";
     final converter = const $converterName();\n
     ${methods.join('\n')}
     \n
     ${_requestWrapperMethod()}\n
-    ${_callMiddlewaresMethod()}
+    ${_callMiddlewaresMethod()}\n
+    List<Cosmic.Middleware> getMiddlewares(String path);
     }
     ''';
   }
@@ -57,10 +55,10 @@ class Gen {
       final Type returnType = ${_defineReturnType(provider.returns, true)};
       final String path = "$path";\n
       return _callMiddleware(
-        new Request(
+        new Cosmic.Request(
           "${_getPath(provider.method.path, provider.pathParams, provider.queryParams)}", 
           http.$httpM, 
-          ANTN.${provider.method.runtimeType.toString()},
+          ${provider.method.runtimeType.toString()},
           ${_addBodyIfExists(provider.body)}
           ${_addHeaderIfExists(provider.headerMap)}
         ),
@@ -89,7 +87,7 @@ class Gen {
       if (!genericWrap) {
         return r;
       } else {
-        return "const TypeProvider<$r>().type";
+        return "const Cosmic.TypeProvider<$r>().type";
       }
     }
   }
@@ -118,7 +116,7 @@ class Gen {
 
   static String _callMiddlewaresMethod() {
     return '''
-    Future<dynamic> _callMiddleware(Request request, Type returnType, String path, {int index = 0, Completer completer, List<Middleware> reqMiddlewares}) async {
+    Future<dynamic> _callMiddleware(Cosmic.Request request, Type returnType, String path, {int index = 0, Completer completer, List<Cosmic.Middleware> reqMiddlewares}) async {
       reqMiddlewares = reqMiddlewares?? getMiddlewares(path);
       completer = completer?? new Completer();
   
@@ -136,18 +134,18 @@ class Gen {
   }
 
   static _getWrapFuncParams(List<ANTN.Path> pathParams, List<ANTN.Query> queryParams, ANTN.HeaderMap header, ANTN.Body body) {
-    List<String> params = pathParams.map((p) => p.param).toList();
-    params.addAll(queryParams.map((q) => q.query).toList());
+    List<String> params = pathParams.map((p) => "${p.type} ${p.param}").toList();
+    params.addAll(queryParams.map((q) => "${q.type} ${q.query}").toList());
 
     if (header != null) {
-      params.add(header.name);
+      params.add("${header.type} ${header.name}");
     }
 
     if (body != null) {
-      params.add(body.name);
+      params.add("${body.type} ${body.name}");
     }
 
-    return params.join(",");
+    return params.length == 0 ? "" : "{${params.join(",")}}";
   }
 
   static _addHeaderIfExists(ANTN.HeaderMap headerMap) {

@@ -82,7 +82,11 @@ class Parser {
       List<dynamic> ps = _getAnnotateds(param, type);
 
       if (ps != null) {
-        params.addAll(ps);
+        final String type = getSymbolName(param.type.simpleName);
+
+        params.addAll(
+          ps.map((p) => p.clone(type)).toList()
+        );
       }
     }
 

@@ -8,10 +8,14 @@ part 'data.dart';
 part 'http_method.dart';
 part 'http_methods.dart';
 
-class Annotation {
+abstract class Annotation {
   final bool _once;
+  final String _type;
 
-  const Annotation([this._once = false]);
+  const Annotation([this._once = false, this._type]);
 
   bool get once => _once;
+  String get type => _type;
+
+  Annotation clone(String type);
 }
