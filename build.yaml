@@ -6,4 +6,4 @@ builders:
     builder_factories: ["cosmicBuilder"]
     build_extensions: {".dart": [".g.dart"]}
     build_to: source
-    auto_apply: dependents
+    auto_apply: all_packages

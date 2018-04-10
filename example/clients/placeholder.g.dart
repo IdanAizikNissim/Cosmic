@@ -15,13 +15,14 @@ abstract class _$PlaceholderClient {
     final String path = "/posts";
 
     return _callMiddleware(
-        new Cosmic.Request(
-          "$url/posts",
-          http.get,
-          Get,
-        ),
-        returnType,
-        path);
+            new Cosmic.Request(
+              "$url/posts",
+              http.get,
+              Get,
+            ),
+            returnType,
+            path)
+        .then<List<PostEntity>>((results) => results);
   }
 
   Future<PostEntity> getPost({int id, Map headers}) {
@@ -29,9 +30,11 @@ abstract class _$PlaceholderClient {
     final String path = "/posts/{id}";
 
     return _callMiddleware(
-        new Cosmic.Request("$url/posts/$id", http.get, Get, headers: headers),
-        returnType,
-        path);
+            new Cosmic.Request("$url/posts/$id", http.get, Get,
+                headers: headers),
+            returnType,
+            path)
+        .then<PostEntity>((results) => results);
   }
 
   Future<PostEntity> create({PostEntity post}) {
@@ -39,14 +42,15 @@ abstract class _$PlaceholderClient {
     final String path = "/posts";
 
     return _callMiddleware(
-        new Cosmic.Request(
-          "$url/posts",
-          http.post,
-          Post,
-          body: converter.encode(post),
-        ),
-        returnType,
-        path);
+            new Cosmic.Request(
+              "$url/posts",
+              http.post,
+              Post,
+              body: converter.encode(post),
+            ),
+            returnType,
+            path)
+        .then<PostEntity>((results) => results);
   }
 
   Future<PostEntity> update({int id, PostEntity post}) {
@@ -54,14 +58,15 @@ abstract class _$PlaceholderClient {
     final String path = "/posts/{id}";
 
     return _callMiddleware(
-        new Cosmic.Request(
-          "$url/posts/$id",
-          http.patch,
-          Patch,
-          body: converter.encode(post),
-        ),
-        returnType,
-        path);
+            new Cosmic.Request(
+              "$url/posts/$id",
+              http.patch,
+              Patch,
+              body: converter.encode(post),
+            ),
+            returnType,
+            path)
+        .then<PostEntity>((results) => results);
   }
 
   Future<http.Response> delete({int id}) {
@@ -69,13 +74,14 @@ abstract class _$PlaceholderClient {
     final String path = "/posts/{id}";
 
     return _callMiddleware(
-        new Cosmic.Request(
-          "$url/posts/$id",
-          http.delete,
-          Delete,
-        ),
-        returnType,
-        path);
+            new Cosmic.Request(
+              "$url/posts/$id",
+              http.delete,
+              Delete,
+            ),
+            returnType,
+            path)
+        .then<http.Response>((results) => results);
   }
 
   Future<dynamic> _request(Future<http.Response> req, Type returnType) {
