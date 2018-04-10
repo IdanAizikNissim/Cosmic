@@ -17,12 +17,14 @@ class Fixer {
   String date;
   Map<String, double> rates;
 }
+
+part 'fixer.g.dart';
       
 @Client(
   "http://api.fixer.io", 
   converter: const JsonConverter()
 )
-class FixerClient extends Cosmic.Client {
+class FixerClient extends Cosmic.Client with _$FixerClient {
   @Get("/latest")
   Future<Fixer> latest({@Query("base") String base = "USD"});
 }   
