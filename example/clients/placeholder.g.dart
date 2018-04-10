@@ -4,81 +4,75 @@
 // Generator: ClientGenerator
 // **************************************************************************
 
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'package:cosmic/cosmic_lib.dart'
-    show Client, Request, TypeProvider, Middleware;
-import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
-import 'package:cosmic/converters/cosmic_converters.dart' show JsonConverter;
-import '../entities/post_entity.dart';
+part of 'placeholder.dart';
 
-class PlaceholderClient extends Client {
+abstract class _$PlaceholderClient {
   final url = "https://jsonplaceholder.typicode.com";
   final converter = const JsonConverter();
 
   Future<List<PostEntity>> getPosts() {
-    final Type returnType = const TypeProvider<List<PostEntity>>().type;
+    final Type returnType = const Cosmic.TypeProvider<List<PostEntity>>().type;
     final String path = "/posts";
 
     return _callMiddleware(
-        new Request(
+        new Cosmic.Request(
           "$url/posts",
           http.get,
-          ANTN.Get,
+          Get,
         ),
         returnType,
         path);
   }
 
-  Future<PostEntity> getPost(id, headers) {
+  Future<PostEntity> getPost({int id, Map headers}) {
     final Type returnType = PostEntity;
     final String path = "/posts/{id}";
 
     return _callMiddleware(
-        new Request("$url/posts/$id", http.get, ANTN.Get, headers: headers),
+        new Cosmic.Request("$url/posts/$id", http.get, Get, headers: headers),
         returnType,
         path);
   }
 
-  Future<PostEntity> create(post) {
+  Future<PostEntity> create({PostEntity post}) {
     final Type returnType = PostEntity;
     final String path = "/posts";
 
     return _callMiddleware(
-        new Request(
+        new Cosmic.Request(
           "$url/posts",
           http.post,
-          ANTN.Post,
+          Post,
           body: converter.encode(post),
         ),
         returnType,
         path);
   }
 
-  Future<PostEntity> update(id, post) {
+  Future<PostEntity> update({int id, PostEntity post}) {
     final Type returnType = PostEntity;
     final String path = "/posts/{id}";
 
     return _callMiddleware(
-        new Request(
+        new Cosmic.Request(
           "$url/posts/$id",
           http.patch,
-          ANTN.Patch,
+          Patch,
           body: converter.encode(post),
         ),
         returnType,
         path);
   }
 
-  Future<http.Response> delete(id) {
+  Future<http.Response> delete({int id}) {
     final Type returnType = http.Response;
     final String path = "/posts/{id}";
 
     return _callMiddleware(
-        new Request(
+        new Cosmic.Request(
           "$url/posts/$id",
           http.delete,
-          ANTN.Delete,
+          Delete,
         ),
         returnType,
         path);
@@ -100,10 +94,11 @@ class PlaceholderClient extends Client {
     return completer.future;
   }
 
-  Future<dynamic> _callMiddleware(Request request, Type returnType, String path,
+  Future<dynamic> _callMiddleware(
+      Cosmic.Request request, Type returnType, String path,
       {int index = 0,
       Completer completer,
-      List<Middleware> reqMiddlewares}) async {
+      List<Cosmic.Middleware> reqMiddlewares}) async {
     reqMiddlewares = reqMiddlewares ?? getMiddlewares(path);
     completer = completer ?? new Completer();
 
@@ -120,4 +115,6 @@ class PlaceholderClient extends Client {
 
     return completer.future;
   }
+
+  List<Cosmic.Middleware> getMiddlewares(String path);
 }

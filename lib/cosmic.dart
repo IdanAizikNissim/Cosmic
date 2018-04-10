@@ -3,7 +3,6 @@
 library cosmic;
 
 import 'dart:mirrors';
-import 'package:path/path.dart' as path;
 import 'package:cosmic/converters/cosmic_converters.dart';
 import 'package:cosmic/cosmic_lib.dart';
 import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
@@ -17,7 +16,7 @@ class Cosmic {
     return parser.parse(client);
   }
 
-  static String generate(Client client, List<String> imports, String outputPath) {
-    return Gen.generate(create(client), imports, outputPath);
+  static String generate(Client client, String filename, List<String> imports, String outputPath) {
+    return Gen.generate(create(client), filename, imports, outputPath);
   }
 }

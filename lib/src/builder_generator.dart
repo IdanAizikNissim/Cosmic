@@ -21,7 +21,8 @@ class ClientGenerator extends GeneratorForAnnotation<Client> {
     return await generate(
       toUri(absolute(file)), 
       className, 
-      file.substring(0, file.lastIndexOf('/'))
+      file.substring(0, file.lastIndexOf('/')),
+      file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.'))
     );
   }
 }

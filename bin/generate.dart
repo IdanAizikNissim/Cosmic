@@ -34,7 +34,7 @@ main(List<String> arguments) async {
   _createOutputDir(outPutDir);
 
   // Get generated code
-  var generated = await generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS], output);
+  var generated = await generate(toUri(absolute(inputFile.path)), args[ARG_OPTION_SERVICE_CLASS], output, input.substring(input.lastIndexOf('/') + 1, input.lastIndexOf('.')));
   outputFile.openWrite();
   outputFile.writeAsString(new DartFormatter().format(generated.toString()));
 }

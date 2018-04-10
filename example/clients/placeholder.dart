@@ -5,17 +5,19 @@ import 'package:cosmic/cosmic_lib.dart' as Cosmic;
 import 'package:http/http.dart' as http;
 import '../entities/post_entity.dart';
 
+part 'placeholder.g.dart';
+
 @Client(
   path: "https://jsonplaceholder.typicode.com",
   converter: const JsonConverter()
 )
-class PlaceholderClient extends Cosmic.Client {
+class PlaceholderClient extends Cosmic.Client with _$PlaceholderClient {
 
   @Get("/posts")
   Future<List<PostEntity>> getPosts();
 
   @Get("/posts/{id}")
-  Future<PostEntity> getPost({@HeaderMap("headers") Map<String, String> headers, @Path("id") int id});
+  Future<PostEntity> getPost({@HeaderMap("headers") Map headers, @Path("id") int id});
 
   @Post("/posts")
   Future<PostEntity> create({@Body("post") PostEntity post});

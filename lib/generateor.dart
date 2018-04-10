@@ -6,13 +6,13 @@ import 'dart:isolate';
 
 import 'package:path/path.dart';
 
-Future<String> generate(Uri path, String serviceClass, String outputPath) async {
+Future<String> generate(Uri path, String serviceClass, String outputPath, String filename) async {
   return _withServer(path.toString(), (HttpServer server) async {
-    return await _execute(server.port, path, serviceClass, outputPath);
+    return await _execute(server.port, path, serviceClass, outputPath, filename);
   });
 }
 
-Future<dynamic> _execute(int port, Uri path, String serviceClass, String outputPath) async {
+Future<dynamic> _execute(int port, Uri path, String serviceClass, String outputPath, String filename) async {
   ReceivePort messagePort = new ReceivePort();
   ReceivePort errorPort = new ReceivePort();
 
@@ -29,7 +29,8 @@ Future<dynamic> _execute(int port, Uri path, String serviceClass, String outputP
           messagePort.sendPort,
           errorPort.sendPort,
           serviceClass,
-          outputPath
+          outputPath,
+          filename,
         ],
         onError: errorPort.sendPort
     );
@@ -67,7 +68,7 @@ Future<dynamic> _execute(int port, Uri path, String serviceClass, String outputP
 Future _isolateLoader(List args) async {
   return Isolate.spawnUri(
       Uri.parse(args[0]), // client.dart
-      [args[3], args[4]], // ServiceClassName
+      [args[3], args[4], args[5]], // ServiceClassName
       args[1] as SendPort,
       onError: args[2] as SendPort,
   );
@@ -129,7 +130,7 @@ String _generatorSource(String apiFilePath) {
         message.send("service args[0] isn't definded in '${apiFilePath}'");
       } else {
         var im = cm.newInstance(new Symbol(''), []);
-        message.send(Cosmic.generate(im.reflectee, toImport, args[1]));
+        message.send(Cosmic.generate(im.reflectee, args[2], toImport, args[1]));
       }
     }
   }

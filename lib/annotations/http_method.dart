@@ -6,4 +6,9 @@ class HttpMethod extends Annotation {
   const HttpMethod(this._path) : super(false);
 
   String get path => _path;
+
+  @override
+  Annotation clone(String type) {
+    return new HttpMethod(_path);
+  }
 }
