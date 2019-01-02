@@ -43,13 +43,13 @@ class Parser {
         List<ParameterMirror> params = (declaration as MethodMirror).parameters;
 
         // Url param
-        var url = _getDataAnnotatedParams(params, ANTN.Url);
+        var url = _getDataAnnotatedParams<ANTN.Url>(params, TypeProvider<ANTN.Url>());
 
         // Body param
-        var body = _getDataAnnotatedParams(params, ANTN.Body);
+        var body = _getDataAnnotatedParams<ANTN.Body>(params, TypeProvider<ANTN.Body>());
 
         // HeaderMap
-        var headerMap = _getDataAnnotatedParams(params, ANTN.HeaderMap);
+        var headerMap = _getDataAnnotatedParams<ANTN.HeaderMap>(params, TypeProvider<ANTN.HeaderMap>());
 
         // Get return type
         List<TypeMirror> returns = (declaration as MethodMirror).returnType.typeArguments;
@@ -59,8 +59,8 @@ class Parser {
           new HttpProvider(
             httpMethod,
             path,
-            _getDataAnnotatedParams(params, ANTN.Path),
-            _getDataAnnotatedParams(params, ANTN.Query),
+            _getDataAnnotatedParams<ANTN.Path>(params, TypeProvider<ANTN.Path>()),
+            _getDataAnnotatedParams<ANTN.Query>(params, TypeProvider<ANTN.Query>()),
             headerMap.length != 0 ? headerMap.first : null,
             body.length != 0 ? body.first : null,
             url.length != 0 ? url.first : null,
@@ -75,17 +75,17 @@ class Parser {
     }
   }
 
-  _getDataAnnotatedParams(List<ParameterMirror> methodParams, Type type) {
-    List<dynamic> params = new List();
+  List<T> _getDataAnnotatedParams<T>(List<ParameterMirror> methodParams, TypeProvider<T> typeProvider) {
+    List<T> params = new List();
 
     for (ParameterMirror param in methodParams) {
-      List<dynamic> ps = _getAnnotateds(param, type);
+      List<dynamic> ps = _getAnnotateds(param, typeProvider.type);
 
       if (ps != null) {
         final String type = getSymbolName(param.type.simpleName);
 
         params.addAll(
-          ps.map((p) => p.clone(type)).toList()
+          ps.map<T>((p) => p.clone(type)).toList()
         );
       }
     }

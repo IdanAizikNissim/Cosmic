@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'package:cosmic/converters/cosmic_converters.dart';
 import 'package:cosmic/annotations/cosmic_annotations.dart';
 import 'package:cosmic/cosmic_lib.dart' as Cosmic;
 import 'package:http/http.dart' as http;
 import '../entities/post_entity.dart';
+import '../post_entity_converter.dart';
 
 part 'placeholder.g.dart';
 
 @Client(
   path: "https://jsonplaceholder.typicode.com",
-  converter: const JsonConverter()
+  converter: const PostEntityConverter()
 )
 class PlaceholderClient extends Cosmic.Client with _$PlaceholderClient {
 

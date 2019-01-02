@@ -1,7 +1,7 @@
 library cosmic_lib;
 
 import 'dart:async';
-import 'dart:convert' show Encoding, UTF8;
+import 'dart:convert' show Encoding, utf8;
 import 'package:meta/meta.dart';
 import 'package:cosmic/annotations/cosmic_annotations.dart' as ANTN;
 import 'package:http/http.dart' as http;

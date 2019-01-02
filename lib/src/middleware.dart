@@ -1,7 +1,7 @@
 part of cosmic_lib;
 
 typedef void Middleware(
-  @required Request request,
+  Request request,
   dynamic next,
 );
 
@@ -30,7 +30,7 @@ class Request {
   }
 
   dynamic bind() {
-    encoding = encoding?? UTF8;
+    encoding = encoding?? utf8;
 
     // Bind httpCall to params
     if (_httpMethod == ANTN.Get || _httpMethod == ANTN.Delete || _httpMethod == ANTN.Head) {

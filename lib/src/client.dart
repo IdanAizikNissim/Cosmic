@@ -17,7 +17,6 @@ abstract class Client {
   }
 
   //  Middleware
-  @protected
   List<Middleware> getMiddlewares(String path) {
     assert(path != null);
     final use = middlewares[path]?? [];

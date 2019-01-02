@@ -8,7 +8,7 @@ part of 'placeholder.dart';
 
 abstract class _$PlaceholderClient {
   final url = "https://jsonplaceholder.typicode.com";
-  final converter = const JsonConverter();
+  final converter = const PostEntityConverter();
 
   Future<List<PostEntity>> getPosts() {
     final Type returnType = const Cosmic.TypeProvider<List<PostEntity>>().type;

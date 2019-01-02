@@ -1,8 +1,8 @@
 part of cosmic_lib;
 
-abstract class Converter {
+abstract class Converter<T> {
   const Converter();
 
   dynamic decode(String data, {Type type});
-  String encode(dynamic object);
+  String encode(T object);
 }
